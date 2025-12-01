@@ -1,1 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1 – Getting Started With ROS2</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+  body {
+    background: url("assets/img/kismet.jpg") center/cover no-repeat fixed;
+    background-color: #0d1117; /* fallback */
+  }
+  .main, .section, .hero {
+    backdrop-filter: blur(6px);
+    background: rgba(22, 27, 34, 0.85);
+  }
+</style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="profile">
+    <img src="assets/img/me.jpeg" alt="Portrait of Justino" class="profile-pic">
+    <h2>Justino DaSilva</h2></div>
+    <a class="nav-link" href="index.html">Home</a>
+    <a class="nav-link" href="about.html">About</a>
+    <a class="nav-link" href="tutorials.html">Tutorials</a>
+    <!--a class="nav-link" href="contact.html">Contact</a-->
+  </div>
+
+
+  <div class="main">
+
+    <div class="hero">
+      <h1>Tutorial 1 – Getting Started With ROS2</h1>
+      <p>
+        This tutorial guides you through ROS2 installation, verifying your setup,
+        and understanding core ROS2 concepts.
+      </p>
+    </div>
+
+    <!-- === SECTION 1 === -->
+    <div class="section">
+      <h2>1. What is ROS2?</h2>
+      <p>
+        ROS2 (Robot Operating System version 2) is a flexible framework for writing
+        robot software. It provides tools, libraries, and conventions to simplify 
+        the task of creating complex robotics behavior.
+      </p>
+    </div>
+
+    <!-- === SECTION 2 === -->
+    <div class="section">
+      <h2>2. Installing ROS2 (Jazzy/Noble)</h2>
+      <p>Here’s the simplest method for installing ROS2 Jazzy on Ubuntu Noble: (ubutuntu lts 24.04)</p>
+      <p>  ROS is quite simple. all  you need is a some curiosity and a computer. You Don't even need a robot as you can run  simulations. </p>
+<!--pre><code>sudo apt update
+sudo apt install ros-jazzy-desktop
+source /opt/ros/jazzy/setup.bash
+</code></pre>
+
+      <p><strong>Tip:</strong> Add the source line to <code>~/.bashrc</code>.</p>
+    </-->
+
+    <!-- === SECTION 3 === --></div>
+    <div class="section">
+      <h2>3. Test Your Installation</h2>
+          <p>Once you have  successfully installed ROS2  we'll start  the turtle simulation
+            <ul>
+              <li> tell the system where to find ROS2 instrutcion set
+
+                <code>
+                  <pre>
+                    source /opt/ros/jazzy/setup.bash
+                  </pre>
+                </code>
+              I an utlizing ubuntulinux  along with the terminal set to  the "terminator: Here i will 
+                opens 4 terminlas and open different topics in each terminal.
+                <div class="tutorial-image">
+                <img src="assets/img/4terminals.png" alt="4 terminals with ROS2 topics">
+                </div>
+              </li>
+              <li>start the turtle simulation  with the command </li>
+              <code>
+                <pre>
+
+                </pre>
+              </code>
+            </ul>
+          </p>
+
+
+
+<!---pre><code>ros2 run demo_nodes_cpp talker
+ros2 run demo_nodes_cpp listener
+</code></pre>
+
+      <p>If messages appear, ROS2 is working correctly.</p--->
+    </div>
+
+  </div>
+</body>
+</html>
 
