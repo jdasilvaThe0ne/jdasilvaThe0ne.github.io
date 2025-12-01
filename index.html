@@ -4,44 +4,89 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Justino DaSilva – Home</title>
-  <link rel="stylesheet" href="assets/css/style.css"
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <div class="sidebar">
-    <h2>My Portfolio</h2>
+    <div class="profile">
+    <img src="assets/img/me.jpeg" alt="Portrait of Justino" class="profile-pic">
+    <h2>Justino DaSilva</h2></div>
     <a class="nav-link" href="index.html">Home</a>
     <a class="nav-link" href="about.html">About</a>
-    <a class="nav-link" href="portfolio.html">Portfolio</a>
     <a class="nav-link" href="tutorials.html">Tutorials</a>
-    <a class="nav-link" href="notes.html">Notes</a>
-    <a class="nav-link" href="blog.html">Blog</a>
-    <a class="nav-link" href="contact.html">Contact</a>
+    <!--a class="nav-link" href="contact.html">Contact</a-->
   </div>
 
   <div class="main">
     <div class="hero">
-      <h1>Robotics & ROS2 Portfolio</h1>
+      <h1> <a href="tutorials.html"> Robot Operating System ROS2</a></h1>
       <p>
-        Welcome to my robotics and advanced systems engineering portfolio. This site documents my projects,
-        tutorials, notes, and experiments with ROS2 (including the Kilted Kaju Jazzy build), Human–Robot
-        Interaction, and Autonomous Systems.
-      </p>
+        Let's Learn Robot Operating system(ROS2). This site documents my projects,
+        tutorials, notes, and experiments with ROS2 (including the Kilted Kaju Jazzy build) lets get started.
+      </p><p> Before we get started let first answer a few concepts; </p>
+      <ol>
+        
+       <li><h5>Why does industries use ROS</h5> </li>
+             <p>>Robots are becomings widely used in manufacturing industries. Having ROS as opensurce ( a community)
+             allows everyone to use as it, whitout limitation.  Persons in the commuity can also Publish to the
+             software. Over the year this has seen to be fruitful to both researchers and manufactuting 
+             industries globaly. To get a better understanding of the type of benifits OpenSource ROS has 
+             provided check <a href="https://www.youtube.com/watch?v=BllUJLtAcgc">this</a> video  on youtube. </p>
+            
+
+        <li><h5>Middleware (bridging hardware with applicattion)</h5> </li>
+               <p>In Robtics Middleware acts like  a driver. It creates a bridge between the robots hardware coponets suchs as <b>sensors</b>
+               and <b>actuators</b>  and the software. Providing a communication pipeline for data exchange  and scheduling,
+               which are required  for building complex systems(robots). If a robot’s components don’t work in coordination, 
+               it stops being intelligent and becomes nothing more than a piece of metal. For a conceptual overview  o ROS2 middleware interface please 
+               visit <a href="https://design.ros2.org/articles/ros_middleware_interface.html">ROS2 Middleware interface</a></p>
+        <li><h5>Is ROS2 important for real robots</h5> </li>
+              <p>>As mentioned earlier Robots is being largely used in industrial settings, many time  diffrern robots 
+              work of different aspects of the production. With  ROS2's realtime cabbilities, manufacturing plants 
+              are provided with resured precise timing.  Additionally  since each component(Node) of robot works somewhat independenttly
+              but at the same time syncronised, they can be turnred off  independently. </p>
+
+        <li><h5>Where we use ROS</h5> </li>
+             <p> is openedsource  and has been applied in differrent areas within society. Robots for space
+             exploration(robonaut 2 ), customer service(pepper) and manufacruting JetArm Pro. These are some of the areas where the robots built 
+             are designed using ROS2 </p>
+             <div class="ros-image-row">
+              <div class="ros-image-card">
+              <img src="assets/img/Space.jpg" alt="Robonaut 2">
+              <p class="ros-caption">Space</p>
+              </div>
+              <div class="ros-image-card">
+                <img src="assets/img/pepper.jpg" alt="Pepper Robot">
+                <p class="ros-caption">Entertainment</p>
+              </div>
+              
+              
+              <div class="ros-image-card">
+             <img src="assets/img/arm.webp" alt="JetArm Pro">
+              <p class="ros-caption">Manufacturing</p>
+              </div>
+
+            </div>
+          
+       </ol>
     </div>
 
     <div class="section">
       <h2>Highlighted Projects</h2>
       <div class="portfolio-grid">
         <div class="card">
-          <h3>ROS2 Jazzy (Kilted Kaju) Installation</h3>
+          <h3><a href="tutorials.html">ROS2 Jazzy (Kilted Kaju) Installation</a></h3>
           <p>Binary installation, troubleshooting Python 3.12 issues, rosdep fixes, environment sourcing, and middleware understanding.</p>
+        
         </div>
         <div class="card">
-          <h3>Human–Robot Interaction Notes</h3>
-          <p>Categorization of social and non‑social environments, interaction modelling, and behaviour frameworks.</p>
+          <h3>project2</h3>
+          <p>Coming Soon</p>
         </div>
         <div class="card">
-          <h3>Advanced Robotics Coursework</h3>
-          <p>Algorithm implementation, ROS2 workspace setup, system behaviour testing.</p>
+          <h3>Project3</h3>
+          <p>Coming Soon</p>
+          <!--p>Algorithm implementation, ROS2 workspace setup, system behaviour testing.</p-->
         </div>
       </div>
     </div>
@@ -51,7 +96,7 @@
       <ul>
         <li>✔️ My robotics projects</li>
         <li>✔️ ROS2 setup walkthroughs (Kilted Kaju Jazzy on Noble)</li>
-        <li>✔️ Notes on Human–Robot Interaction (HRI)</li>
+        <!--li>✔️ Notes on Human–Robot Interaction (HRI)</li-->
         <li>✔️ Blog entries on challenges & debugging experiences</li>
         <li>✔️ Tutorials for others learning robotics</li>
       </ul>
