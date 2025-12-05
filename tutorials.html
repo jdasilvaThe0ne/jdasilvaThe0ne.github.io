@@ -35,7 +35,19 @@
       <h1>Tutorial 1 – Getting Started With ROS2</h1>
       <p>
         This tutorial guides you through ROS2 installation, verifying your setup,
-        and understanding core ROS2 concepts.
+        and understanding core ROS2 concepts. ROS2 can can be deployed using various methods
+        however today we will only be looking at  Installing it on ubuntu noble(lts 24.04) via the debian package
+        <ul>
+          <li>
+           <a href="https://docs.ros.org/en/foxy/How-To-Guides/Setup-ROS-2-with-VSCode-and-Docker-Container.html">Docker Container</a>
+          </li>
+        <li>
+          <a href="https://docs.ros.org/en/kilted/Installation/Alternatives/Ubuntu-Install-Binary.html">Binary Packages</a>
+        </li>
+        <li>
+          <a href="https://docs.ros.org/en/kilted/Installation/Ubuntu-Install-Debs.html">Debian Package</a>
+        </li>
+        </ul>
       </p>
     </div>
 
@@ -49,11 +61,69 @@
       </p>
     </div>
 
-    <!-- === SECTION 2 === -->
     <div class="section">
       <h2>2. Installing ROS2 (Jazzy/Noble)</h2>
-      <p>Here’s the simplest method for installing ROS2 Jazzy on Ubuntu Noble: (ubutuntu lts 24.04)</p>
-      <p>  ROS is quite simple. all  you need is a some curiosity and a computer. You Don't even need a robot as you can run  simulations. </p>
+      <p>
+        If you prefer to build from source you can follow the instructons here: 
+      </p>
+    
+      <ul>
+        <li>
+          <a href="https://github.com/ros2/ros2/blob/kilted/ros2.repos">Source github.com</a>
+        </li>
+      </ul>
+      <p>Don't worry if you are unfamiliar with robotics or Linux...</p>
+    
+      <ul>
+        <li>
+          First let's make sure the system supports the correct character encoding:
+    
+          <pre>
+$ locale
+# Look for UTF-8. If not present:
+$ sudo apt update && sudo apt install locales
+$ sudo locale-gen en_US.UTF-8
+$ sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+# Then verify again
+          </pre>
+        </li>
+      
+      </ul>
+      <p>The libries required for the installation are from the  <b>Ubuntu Universe repository</b> so we must add this before starting the installation
+      <pre>
+      
+$ sudo apt install software-properties-common
+$ sudo add-apt-repository universe
+
+
+      </pre>
+    ROS2 is constantly changing  by the vast community so to get
+    the newest features and fixed we must install the latest update:
+    uses these commands to get the most updated files. 
+    <br>
+    To ge teh installion  we need to   <b>curl</b> so if  you dont have it installed 
+     instll using this command
+     <pre>
+      
+$ sudo apt update
+$ sudo apt install curl -y 
+      
+     </pre>
+Now lets serach for the latest installation file download it an installation
+<pre>
+
+$ export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
+
+$ curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb"
+
+$ sudo dpkg -i /tmp/ros2-apt-source.deb
+
+</pre>
+    
+    </p>
+     
+    
+    
 <!--pre><code>sudo apt update
 sudo apt install ros-jazzy-desktop
 source /opt/ros/jazzy/setup.bash
@@ -62,7 +132,8 @@ source /opt/ros/jazzy/setup.bash
       <p><strong>Tip:</strong> Add the source line to <code>~/.bashrc</code>.</p>
     </-->
 
-    <!-- === SECTION 3 === --></div>
+    <!-- === SECTION 3 === -->
+    </div>
     <div class="section">
       <h2>3. Test Your Installation</h2>
           <p>Once you have  successfully installed ROS2  we'll start  the turtle simulation
@@ -71,7 +142,7 @@ source /opt/ros/jazzy/setup.bash
 
                 <code>
                   <pre>
-                    source /opt/ros/jazzy/setup.bash
+source /opt/ros/jazzy/setup.bash
                   </pre>
                 </code>
               I am utlizing ubuntulinux  along with the terminal set to  the "terminator: Here i will 
