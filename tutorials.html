@@ -119,9 +119,42 @@ $ curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros
 $ sudo dpkg -i /tmp/ros2-apt-source.deb
 
 </pre>
-    
+ To ensure that  everything went well lets test the version that was installed  we should see something like This
+ Unfortunately my ubuntu mancihine is currenlty out of reach so i installed ROS on window understanding
+ Windows subsystem for Linux.  the installation process is basically the same
+  only this time on window.<br>
+  before we start exacuting commands  lets check to ensure we have hte correct(latest version installed)
+  as of December 12 2025 the latest version is avaiable for  Ubuntu 20.04 ( Noble) as mentioned earlier run the below command
+  if you have  ubuntu it would be <b>ros2 --version</b> instead
+<pre>
+  printenv ROS_DISTRO
+
+</pre> 
+you should see a result like this (jazzy) corresponding to ubuntu 24.04
+<div class="tutorial-image">
+ <img src="assets/img/ros2_version.png" alt="Ros version">
+</div>
+ 
     </p>
-     
+<p>
+We will now test that our installation is working correctly by  running a simulation
+ope two terminals  and place them to the right of the screen, one above the other as 
+seen in the image below. In the top terminal run 
+<code>
+    ros2 run turtlesim turtlesim_node
+
+</code>
+An image similar to the one shown on the left should appear with an animated turtle in the center 
+we can move the image much  you would move a robot but first we must tell ros2 that we want to 
+to start moving it. In the  second terminal enter <code> ros2 run turtlesim_teleop_key</code> this will give you a list of keys
+you can press to move the turtle.
+as you press the keys the top right terminal will tell you if the action has copleted or 
+another instruction has causes it to top. this is denote orange text in the top righ terminal [Warn]
+<div class="tutorial-image">
+ <img src="assets/img/keys.png" alt="">
+</div></p>
+
+ 
     
     
 <!--pre><code>sudo apt update
@@ -131,10 +164,99 @@ source /opt/ros/jazzy/setup.bash
 
       <p><strong>Tip:</strong> Add the source line to <code>~/.bashrc</code>.</p>
     </-->
+   </div>
+   <div>
+    <!-- Section 3-->
+   </div>
+   <div class="section">
+      <h2>3. Undestanding Nodes</h2>
+          <p>Much like a graph have Nodes Robots(or Robot Operating System) work with  multiple components 
+            that are called Node. They allow the robot to acieve syncronization amongnst  different parts, 
+            they are units of processing.  Nodes  connect to heach other to intechange or communicatde data  via topics, services
+            or actions. According to <a  href="https://arxiv.org/pdf/2305.09933"> Impact of ROS2 Node Composition  in Robotic System</a> where more detailed cann b found 
+            there are three types of Nodes: 
+            <ul><li>
+            Node (without Qualifier) Much like  object contructer in java. or any object oriented programming language. 
+
+            </li>
+           <li>
+            Lificycle Node
+            </li>
+            <li>
+            Composition Nodes
+
+            </li>
+           </ul>
+           with each severing a different purpose. to determine currently available Nodes  within the turtlesim
+           simply enter the comand <code> ros2 node list </code> in our example we exptect to see tow nodes( two components running)
+           <b>teleop_turtle</b> and <b> turtlesim</b> this is becasuse earlier we  initialised these two
+           node  the commands <code> ros2 run turtlesim_node</code> and <code>ros2 run turtelsim turtlesim_teleop_key</code>
+           if we were to  cancel these two run we would get an empty output after sinning <code> ros2 node list</code>
+           <div class="tutorial-image">
+                <img src="assets/img/node_list.png" alt="Node List Ros2">
+                </div>
+            
+            </ul>
+          To get information relating to a particular node we use the command  (in the turtlesim simulator)  <code>ros2  node info /turtlesim</code>
+          the  image below the the details associated  the /turtelsim node 
+          <div class="tutorial-image">
+                <img src="assets/img/node_info.png" alt="Node information">
+                </div>
+          </p>
+  <!--Section 4-->
+  <div class="section">
+      <h2>3. Undestanding Topics</h2>
+          <p>In the section above we spoke about Nodes much like a graph would have and we also stated that the communicate with each other to achieve full syncronization 
+            across the robot. for communication ( the edge of the graph) ROS 2 uses what are called topics. Topics are like a constant line of output where  an output  can be published/written 
+            and read by multiples nodes.  this constant update, read/write  allows all each Nodeto know the status of it neighbours in real time.  
+          
+           there are always two topics running(listening) 
+           <code>
+            <ul>
+              <li>parameter_events</li>
+              <li>rosout</li>
+            </ul>
+
+
+
+           </code>
+          
+           
+           
+           <div class="tutorial-image">
+                <img src="assets/img/default_topics.png" alt="Default Topics">
+                </div>
+          After we start the turtelsim and turtle_teleop_key  these three additional topics start
+          <code><ul>
+            <li>turtle1/cmd_vel </li>
+            <li>turtle1/color_sensor</li>
+            <li>turtle1/pose</li>
+          </ul> </code>
+           if we take a look at the type of data that the topic <code>turtle1/pose</code>uses we see  four(4) Real valuse that represents
+           the  postions on the X and y axis, along with the linear and algular velocity for a total 
+           of four value. <b>NOTE!!</b> in the installation of ros2 under  Windows subsytem for liux(our current installation)
+           there appears to be a bug as het current "pose" data keeps repeating indefintitly  with the starting state 
+           In my opinion this data should only be updated when the simulator is given and instruction. for example
+           when on of the arrow key is pressed as the cause the turtle on the simulator  to react
+
+           represent bot
+           <div class="tutorial-image">
+                <img src="assets/img/topic_pose.png" alt="Sample data for the topic <b>pose<b/>">
+                </div>
+          lets  do a bit of an experiment, lets tell  the turtle to move forward at a speed of 2.0 and 
+          at the same time rutning a a rate of 1.5.  the iage below shows the resulting  path the turtle would 
+          take if we were to sent the following commnad <code>ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0}, angular: {z: 1.5}}</code>
+          <div class="tutorial-image">
+                <img src="assets/img/circular_movement.png" alt="turtle moving in circle">
+                </div>
+          </p>
+
+
 
     <!-- === SECTION 3 === -->
-    </div>
-    <div class="section">
+    
+  
+    <!--<div class="section">
       <h2>3. Test Your Installation</h2>
           <p>Once you have  successfully installed ROS2  we'll start  the turtle simulation
             <ul>
@@ -158,7 +280,7 @@ source /opt/ros/jazzy/setup.bash
                 </pre>
               </code>
             </ul>
-          </p>
+          </p>-->
 
 
 
