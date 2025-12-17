@@ -186,7 +186,7 @@ ros2 node info /turtlesim
       </pre>
 
       <div class="ros-screenshot">
-        <img src="assets/img/node_info.png"
+        <img src="assets/img/nodelist_info.png"
              alt="node lis">
         <div class="ros-caption">
              list of node and detail on the turtlesim node  </div>
@@ -390,17 +390,34 @@ ros2 action list
       <h2>Using rqt_console, rqt_graph, and rosbag</h2>
 
       <p>
-        The rqt tools provide visualization and debugging capabilities for ROS
-        systems.
+          Rqt console is a graphical user interface  that  
+          Allows you to see log messages  in a very user friendly manner, message that would ususally be 
+          seen in the cli. it provide filters options that alow you to do debugging
+          more easily. There is the option to also highlight particular keywords making searches standout.
+          in the imaage below you see the  same messges in the rqt_conosle(right)  in the left (terminal)
+
+      <div class="ros-screenshot">
+        <img src="assets/img/Rqt_console .png"
+             alt="node lis">
+        <div class="ros-caption">
+             Terminal and rqt_console with message  </div>
+     </div>
       </p>
 
       <pre>
 rqt_graph
       </pre>
-
-      <div class="placeholder">
-        Screenshot: rqt_graph showing node and topic connections
-      </div>
+      <p>
+        By running the above <code>rqt_graph</code>  a visual representation of the simulated robot is shown. In this case
+        we have two nodes available. <code>teleop_turtle </code> and <code> turtlesim</code> it also displays  the relationship between 
+        these town nodes such as the <code>topic</code> and <code>action</code>
+      </p>
+      <div class="ros-screenshot">
+        <img src="assets/img/rqt_graph.png"
+             alt="rqt_graph">
+        <div class="ros-caption">
+             rqt_graph  with two nodes <b>teleop</b> and <b>turtlesim</b></div>
+     </div>
 
       <p>
         <strong>rosbag</strong> allows recording and replaying ROS data.
