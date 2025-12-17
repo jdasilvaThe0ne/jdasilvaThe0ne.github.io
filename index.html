@@ -1,107 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Justino DaSilva – Home</title>
+  <meta charset="UTF-8">
+  <title>Robotics Portfolio – Justino DaSilva</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <div class="sidebar">
-    <div class="profile">
-    <img src="assets/img/me.jpeg" alt="Portrait of Justino" class="profile-pic">
-    <h2>Justino DaSilva</h2></div>
-    <a class="nav-link" href="index.html">Home</a>
-    <a class="nav-link" href="about.html">About</a>
-    <a class="nav-link" href="tutorials.html">Tutorials</a>
-    <!--a class="nav-link" href="contact.html">Contact</a-->
+
+  <!-- Profile -->
+  <div class="profile">
+    <img src="assets/img/me.jpeg" alt="Justino DaSilva">
+    <span>Justino DaSilva</span>
   </div>
 
-  <div class="main">
-    <div class="hero">
-      <h1> <a href="tutorials.html"> Robot Operating System ROS2</a></h1>
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <h2>Robotics Portfolio</h2>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lab1.html">Lab 1 – Getting Started</a></li>
+      <li><a href="lab2.html">Lab 2 – Core Concepts</a></li>
+      <li><a href="lab3.html">Lab 3 – URDF & RViz2</a></li>
+      <li><a href="lab4.html">Lab 4 – Simulation & Control</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+
+    <!-- Hero Section -->
+    <section>
+      <h1>Robotics & Autonomous Systems</h1>
+
       <p>
-        Let's Learn Robot Operating system(ROS2). This site documents my projects,
-        tutorials, notes, and experiments with ROS2 (including the Kilted Kaju Jazzy build) lets get started.
-      </p><p> Before we get started let first answer a few concepts; </p>
-      <ol>
-        
-       <li><h5>Why does industries use ROS</h5> </li>
-             <p>>Robots are becomings widely used in manufacturing industries. Having ROS as opensurce ( a community)
-             allows everyone to use as it, whitout limitation.  Persons in the commuity can also Publish to the
-             software. Over the year this has seen to be fruitful to both researchers and manufactuting 
-             industries globaly. To get a better understanding of the type of benifits OpenSource ROS has 
-             provided check <a href="https://www.youtube.com/watch?v=BllUJLtAcgc">this</a> video  on youtube. </p>
-            
+        Robotics is an interdisciplinary field that combines mechanical design,
+        electronics, control theory, and software engineering to create intelligent
+        machines capable of sensing, decision-making, and action.
+      </p>
 
-        <li><h5>Middleware (bridging hardware with applicattion)</h5> </li>
-               <p>In Robtics Middleware acts like  a driver. It creates a bridge between the robots hardware coponets suchs as <b>sensors</b>
-               and <b>actuators</b>  and the software. Providing a communication pipeline for data exchange  and scheduling,
-               which are required  for building complex systems(robots). If a robot’s components don’t work in coordination, 
-               it stops being intelligent and becomes nothing more than a piece of metal. For a conceptual overview  o ROS2 middleware interface please 
-               visit <a href="https://design.ros2.org/articles/ros_middleware_interface.html">ROS2 Middleware interface</a></p>
-        <li><h5>Is ROS2 important for real robots</h5> </li>
-              <p>>As mentioned earlier Robots is being largely used in industrial settings, many time  diffrern robots 
-              work of different aspects of the production. With  ROS2's realtime cabbilities, manufacturing plants 
-              are provided with resured precise timing.  Additionally  since each component(Node) of robot works somewhat independenttly
-              but at the same time syncronised, they can be turnred off  independently. </p>
+      <p>
+        Modern robotics systems increasingly rely on middleware frameworks such as
+        <strong>ROS 2 (open source) </strong>  to manage communication, scalability, and real-time
+        constraints across distributed components. They are becomings widely used in manufacturing 
+        industries, with it's opeen source nature,everyone to use as it, whitout limitation. 
+        Persons in the commuity can also Publish to the software. Over the years this has proved to be fruitful to both
+        researchers and manufactuting industries globaly. To get a better understanding of the type of benifits OpenSource ROS has 
+        provided check <a href="https://www.youtube.com/watch?v=BllUJLtAcgc">this</a> video  on youtube.
+      </p>
 
-        <li><h5>Where we use ROS</h5> </li>
-             <p> is openedsource  and has been applied in differrent areas within society. Robots for space
-             exploration(robonaut 2 ), customer service(pepper) and manufacruting JetArm Pro. These are some of the areas where the robots built 
-             are designed using ROS2 </p>
-             <div class="ros-image-row">
-              <div class="ros-image-card">
-              <img src="assets/img/Space.jpg" alt="Robonaut 2">
-              <p class="ros-caption">Space</p>
-              </div>
-              <div class="ros-image-card">
-                <img src="assets/img/Pepper.JPG" alt="Pepper Robot">
-                <p class="ros-caption">Entertainment</p>
-              </div>
-              
-              
-              <div class="ros-image-card">
-             <img src="assets/img/arm.webp" alt="JetArm Pro">
-              <p class="ros-caption">Manufacturing</p>
-              </div>
+      <p>
+        This portfolio documents hands-on laboratory work focused on ROS 2,
+        robot modeling, simulation, control, and system integration.
+      </p>
+    </section>
 
-            </div>
-          
-       </ol>
-    </div>
+    <!-- Robotics Domains -->
+    <section>
+      <h2>Key Application Areas</h2>
 
-    <div class="section">
-      <h2>Highlighted Projects</h2>
-      <div class="portfolio-grid">
-        <div class="card">
-          <h3><a href="tutorials.html">ROS2 Jazzy (Kilted Kaju) Installation</a></h3>
-          <p>Binary installation, troubleshooting Python 3.12 issues, rosdep fixes, environment sourcing, and middleware understanding.</p>
-        
+      <p>
+        Robotics technologies are deployed across a wide range of industries,
+        addressing challenges that require precision, autonomy, and adaptability.
+        For Example Robots for space exploration(robonaut 2 ), customer service(pepper) 
+        and manufacruting JetArm Pro. Are some of the areas an the robots that are built 
+         are designed for specific use case using ROS2
+      </p>
+
+      <div class="image-row">
+
+        <div class="image-card">
+          <img src="assets/img/space.jpg" alt="Space Exploration">
+          <div class="image-caption">Space Exploration</div>
         </div>
-        <div class="card">
-          <h3>project2</h3>
-          <p>Coming Soon</p>
+
+        <div class="image-card">
+          <img src="assets/img/pepper1.png" alt="Entertainment Robotics">
+          <div class="image-caption">Entertainment</div>
         </div>
-        <div class="card">
-          <h3>Project3</h3>
-          <p>Coming Soon</p>
-          <!--p>Algorithm implementation, ROS2 workspace setup, system behaviour testing.</p-->
+
+        <div class="image-card">
+          <img src="assets/img/arm.png" alt="Manufacturing Robotics">
+          <div class="image-caption">Manufacturing</div>
         </div>
+
       </div>
-    </div>
+    </section>
 
-    <div class="section">
-      <h2>What This Site Contains</h2>
-      <ul>
-        <li>✔️ My robotics projects</li>
-        <li>✔️ ROS2 setup walkthroughs (Kilted Kaju Jazzy on Noble)</li>
-        <!--li>✔️ Notes on Human–Robot Interaction (HRI)</li-->
-        <li>✔️ Blog entries on challenges & debugging experiences</li>
-        <li>✔️ Tutorials for others learning robotics</li>
-      </ul>
-    </div>
-  </div>
+    <!-- About ROS -->
+    <section>
+      <h2>Why ROS 2?</h2>
+
+      <p>
+        ROS 2 is a middleware designed to support real-world
+        robotic systems. It emphasizes reliability,
+        security, and real-time performance, which is crucial in enablling the robot 
+        to interact with its environment smoothly
+      </p>
+
+      <p>
+        Additionally,standardized interfaces, ROS 2 enables developers to
+        transition seamlessly from simulation to deployment on physical robots.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>
+      © 2025 Justino DaSilva · Robotics Portfolio
+    </p>
+    <p>
+      Built with ROS 2, HTML5, and CSS · Academic & Professional Use
+    </p>
+  </footer>
 
 </body>
 </html>

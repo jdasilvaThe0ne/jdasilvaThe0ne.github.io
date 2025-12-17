@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 3 – URDF, TF, and RViz2</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Profile -->
+  <div class="profile">
+    <img src="assets/img/me.jpeg" alt="Justino DaSilva">
+    <span>Justino DaSilva</span>
+  </div>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <h2>ROS 2 Labs</h2>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lab1.html">Lab 1 – Getting Started</a></li>
+      <li><a href="lab2.html">Lab 2 – Core Concepts</a></li>
+      <li><a href="lab3.html">Lab 3 – URDF & RViz2</a></li>
+      <li><a href="lab4.html">Lab 4 – Simulation & Control</a></li>
+    </ul>
+
+    <hr>
+
+    <ul>
+      <li><a href="#urdf">URDF Overview</a></li>
+      <li><a href="#structure">Robot Structure</a></li>
+      <li><a href="#joints">Links & Joints</a></li>
+      <li><a href="#tf">TF & TF2</a></li>
+      <li><a href="#rviz">RViz2</a></li>
+      <li><a href="#launch">Launch Files</a></li>
+      <li><a href="#rrbot">RRBot Comparison</a></li>
+    </ul>
+  </nav>
+
+  <!-- Content -->
+  <main class="content">
+
+    <!-- Section 1 -->
+    <section id="urdf">
+      <h2>URDF Overview</h2>
+
+      <p>
+        The <strong>Unified Robot Description Format (URDF)</strong> is an XML-based
+        specification used in ROS 2 to describe the physical structure of a robot.
+      </p>
+
+      <p>
+        URDF defines:
+      </p>
+      <ul>
+        <li>Links (rigid bodies)</li>
+        <li>Joints (connections between links)</li>
+        <li>Visual, collision, and inertial properties</li>
+      </ul>
+
+      <p>
+        URDF files are typically stored in the <code>urdf/</code> directory of a ROS 2
+        package.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="structure">
+      <h2>Robot Structure</h2>
+
+      <p>
+        The robot described in this lab is a simple articulated system composed of
+        a base and one or more movable links.
+      </p>
+
+      <p>
+        Example URDF snippet:
+      </p>
+
+      <pre>
+&lt;robot name="simple_bot"&gt;
+  &lt;link name="base_link"&gt;
+    &lt;visual&gt;
+      &lt;geometry&gt;
+        &lt;box size="0.4 0.4 0.2"/&gt;
+      &lt;/geometry&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+&lt;/robot&gt;
+      </pre>
+
+      <div class="placeholder">
+        Screenshot: simple robot rendered in RViz2
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="joints">
+      <h2>Links and Joints</h2>
+
+      <p>
+        Links represent rigid components, while joints define how those components
+        move relative to one another.
+      </p>
+
+      <p>
+        Common joint types include:
+      </p>
+
+      <ul>
+        <li>fixed</li>
+        <li>revolute</li>
+        <li>continuous</li>
+        <li>prismatic</li>
+      </ul>
+
+      <p>
+        Example revolute joint:
+      </p>
+
+      <pre>
+&lt;joint name="joint1" type="revolute"&gt;
+  &lt;parent link="base_link"/&gt;
+  &lt;child link="link1"/&gt;
+  &lt;origin xyz="0 0 0.2" rpy="0 0 0"/&gt;
+  &lt;axis xyz="0 0 1"/&gt;
+&lt;/joint&gt;
+      </pre>
+
+      <div class="placeholder">
+        Diagram: joint rotation axis visualization
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="tf">
+      <h2>TF and TF2</h2>
+
+      <p>
+        TF is the ROS system responsible for keeping track of multiple coordinate
+        frames over time.
+      </p>
+
+      <p>
+        <strong>TF2</strong> is the updated and improved implementation used in ROS 2.
+      </p>
+
+      <p>
+        Key benefits of TF2:
+      </p>
+
+      <ul>
+        <li>Time-aware transformations</li>
+        <li>Better threading and buffering</li>
+        <li>Improved API consistency</li>
+      </ul>
+
+      <pre>
+ros2 run tf2_tools view_frames
+      </pre>
+
+      <div class="placeholder">
+        Screenshot: TF tree generated from URDF
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="rviz">
+      <h2>Visualizing the Robot in RViz2</h2>
+
+      <p>
+        RViz2 is a 3D visualization tool used to inspect robot models, sensor data,
+        and coordinate frames.
+      </p>
+
+      <p>
+        To display a URDF model:
+      </p>
+
+      <pre>
+ros2 run joint_state_publisher_gui joint_state_publisher_gui
+ros2 run robot_state_publisher robot_state_publisher simple_bot.urdf
+      </pre>
+
+      <p>
+        The <strong>RobotModel</strong> display type must be added in RViz2, with
+        the correct <code>robot_description</code> parameter selected.
+      </p>
+
+      <div class="placeholder">
+        Screenshot: RViz2 showing robot model with TF frames
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="launch">
+      <h2>Launch Files</h2>
+
+      <p>
+        Launch files allow multiple ROS 2 nodes to be started together with a
+        single command.
+      </p>
+
+      <p>
+        A Python launch file may start:
+      </p>
+
+      <ul>
+        <li>robot_state_publisher</li>
+        <li>joint_state_publisher</li>
+        <li>RViz2</li>
+      </ul>
+
+      <p>
+        This ensures consistent startup and reduces configuration errors.
+      </p>
+
+      <div class="placeholder">
+        Code snippet: Python launch file for RViz2
+      </div>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="rrbot">
+      <h2>RRBot Comparison</h2>
+
+      <p>
+        The RRBot example is a reference robot used in ROS documentation to
+        demonstrate a two-link revolute manipulator.
+      </p>
+
+      <p>
+        Comparison with this lab’s robot:
+      </p>
+
+      <ul>
+        <li>Both use revolute joints</li>
+        <li>Both rely on TF for frame transforms</li>
+        <li>RRBot includes more detailed inertial modeling</li>
+      </ul>
+
+      <p>
+        Studying RRBot helps reinforce best practices in URDF design.
+      </p>
+
+      <div class="placeholder">
+        Screenshot: RRBot displayed in RViz2
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

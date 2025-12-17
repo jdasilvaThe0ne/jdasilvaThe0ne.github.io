@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 2 – Core ROS 2 Concepts and </title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+  // Initialize votes if not present
+  if (!localStorage.getItem('agreeVotes')) {
+    localStorage.setItem('agreeVotes', 0);
+    localStorage.setItem('disagreeVotes', 0);
+  }
+
+  function updateDisplay() {
+    document.getElementById('agreeCount').textContent =
+      localStorage.getItem('agreeVotes');
+    document.getElementById('disagreeCount').textContent =
+      localStorage.getItem('disagreeVotes');
+  }
+
+  function vote(type) {
+    let count = parseInt(localStorage.getItem(type + 'Votes'));
+    localStorage.setItem(type + 'Votes', count + 1);
+    updateDisplay();
+  }
+
+  updateDisplay();
+</script>
+
+</head>
+<body>
+
+  <!-- Profile (Top Left) -->
+  <div class="profile">
+    <img src="assets/img/me.jpeg" alt="Justino DaSilva">
+    <span>Justino DaSilva</span>
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <h2>ROS 2 Labs</h2>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lab1.html">Lab 1 – Getting Started</a></li>
+      <li><a href="lab2.html">Lab 2 – Core Concepts</a></li>
+      <li><a href="lab3.html">Lab 3 – URDF & RViz2</a></li>
+      <!--li><a href="lab4.html">Lab 4 – Simulation & Control</a></li-->
+    </ul>
+
+    <hr>
+
+    <ul>
+      <li><a href="#config">Configuring ROS</a></li>
+      <li><a href="#turtlesim">Turtlesim</a></li>
+      <li><a href="#nodes">Nodes</a></li>
+      <li><a href="#topics">Topics</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#parameters">Parameters</a></li>
+      <li><a href="#actions">Actions</a></li>
+      <li><a href="#rqt">rqt & rosbag</a></li>
+      <li><a href="#launch">Launch Files</a></li>
+      <li><a href="#choreo">Turtle Choreography</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+
+    <!-- Section 1 -->
+    <section id="config">
+      <h2>Configuring ROS</h2>
+
+      <p>
+        Before using ROS 2 commands, the environment must be sourced. This sets
+        required environment variables so that ROS packages and tools can be
+        discovered by the system.
+      </p>
+
+      <pre>
+source /opt/ros/jazzy/setup.bash
+      </pre>
+
+      <p>
+        Or it can  added  to the .bashrc file  and when you are ready to use 
+        simply enter the command source .bashrc  instead. <b>Note</b> you must  be in your home directory
+        before running these commands
+<pre>
+echo "source /opt/ros/jazzy/setup.bash" >> .bashrc 
+source .bashrc 
+</pre>
+        To confirm the installation, the ROS 2 version ( on windows using wsl)  use the command: if it fails
+        you may need to install  "pip"   here we see we are using <b> ROS version 0.32.6</b>
+      </p>
+
+      <pre>
+pip show ros2cli
+      </pre>
+
+      <!--div class="placeholder"-->
+    <div class="ros-screenshot">
+  <img src="assets/img/ros2_version.png"
+         alt="ROS version">
+   <div class="ros-caption">
+      ROS_version
+    </div>
+</div>
+
+    
+      <!--/div-->
+    </section>
+
+    <!-- Section 2 -->
+    <section id="turtlesim">
+      <h2>Simulation  with turtlesim</h2>
+
+      <p>
+        Ros2 commes with the default robot simulator <strong>turtlesim</strong>  which ovides a simple 2D simulator that
+        helpu you to understand core concepts of ROS2 such as nodes, topics, services, and
+        parameters.  To have a feel of what im referring, use the same terminal as before and execute
+        the below commands.
+      </p>
+
+      <pre>
+ros2 run turtlesim turtlesim_node
+ros2 run turtlesim turtle_teleop_key
+      </pre>
+
+      <p>
+        The teleoperation(telop) node publishes movements commands that control the turtle’s
+        movement using the keyboard a total of 8 keys is available for moving the robot(turtle).
+      </p>
+
+     <div class="ros-screenshot">
+        <img src="assets/img/node_key.png"
+             alt="control buttons">
+        <div class="ros-caption">
+             Movement Keys </div>
+     </div>
+
+    </section>
+
+    <!-- Section 3 -->
+    <section id="nodes">
+      <h2>Understanding Nodes</h2>
+
+      <p>
+        A node is an executable that uses the ROS 2 API to perform a specific tas
+        within a robotics system. Much like a graph have vertices Robots(or Robot Operating System) work with  multiple components 
+            that are called Node. They allow the robot to achieve syncronization with the different  robtos parts.  Nodes  connect to 
+            each other to intechange or communicate data  via topics, services  or actions. According to <a  href="https://arxiv.org/pdf/2305.09933"> 
+                Impact of ROS2 Node Composition  in Robotic System</a> where more detailed can be found. There are three types of Nodes:
+            <li> Node ( without Qualifier) much like a constructer in a object oriented programming 
+                language
+            <li>Lifecycle Nodes</li> 
+            <li>Composition Nodes
+      </p>
+
+      
+        
+       <div class="vote-box">
+        <p><strong>Statement:</strong> A node is an executable that uses ROS 2 APIs.</p>
+
+        <button onclick="vote('agree')">Agree</button>
+        <button onclick="vote('disagree')">Disagree</button>
+
+        <p>
+            👍 Agree: <span id="agreeCount">0</span> |
+            👎 Disagree: <span id="disagreeCount">0</span>
+        </p>
+        </div>
+
+  
+        </div>
+
+      </p>
+
+      <p>
+
+        To see which nodes are  active  and determine the status of its attributes  use 
+        use the below command.  In this case only the turtlesim_node is running so only this node is displayed. 
+      </p>
+
+      <pre>
+ros2 node list
+ros2 node info /turtlesim
+      </pre>
+
+      <div class="ros-screenshot">
+        <img src="assets/img/node_info.png"
+             alt="node lis">
+        <div class="ros-caption">
+             list of node and detail on the turtlesim node  </div>
+     </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="topics">
+      <h2>Understanding Topics</h2>
+
+      <p>
+        <strong>Analogy:</strong> T
+        In the section above we spoke about Nodes,and stated that the communicate with each other to achieve syncronization,  
+        across the differnt hardware and software components  across the robot. For communication ( the edge of the graph)
+        ROS 2 uses what are called topics. Topics are like a constant line of output where  an output 
+        can be published/written  and read by multiples nodes.  this constant update, read/write  allows all each Nodeto know the
+         status of it neighbours in real time. It functions  simalar to a broadcast message or group chat. 
+          
+         <br><br>In RoS2 there are always two topics running(listening) 
+        <li> /paramter_events</li>
+        <li> rosout</li>
+        </p>
+        <p>
+         run  the below command  you'll see  three additional topics added. 
+      </p>
+      
+      
+      <!--p>
+        Topics that are currently active can be listed and inspected:
+      </p-->
+
+      <pre>
+ros2 topic list
+ros2 topic info /turtle1/cmd_vel
+      </pre>
+       <div class="ros-screenshot">
+        <img src="assets/img/topics.png"
+             alt="node lis">
+        <div class="ros-caption">
+             list of node and detail on the turtlesim node  </div>
+     </div>
+      <p>
+        imfomation being posted to topic could be observed using the echo command let's
+        let's  view the position of the turtle using the commands below.   The second comand 
+         cause the turtle  to move in a circle. 
+      </p>
+
+      <pre>
+ros2 topic echo /turtle1/pose
+      </pre>
+       
+         <div class="video-container">
+        <video controls>
+            <source src="assets/videos/infinite_cycle_pose..mp4" type="video/mp4">
+
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </video>
+        </div>
+         <p class="error">
+         Note in my installation(WSL) the topic "pose" keeps cycling see video below.  
+         The ubuntu installation however does not behaive this way,  it just    prints 
+         it once ans waits for  other instructios. In my opinion this data should 
+         only be updated when the simulator is given and instruction. for example
+           when on of the arrow key is pressed which cause the turtle on the simulator  to react
+       </p>
+
+      <p>
+        Publishing to a topic sends commands directly to the turtle: for example the 
+        command <code> ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/twist "{linear: {x: 2.0}, angular: {z: 1.5}}"
+      </code> tells ros to move the turtlesim in cirtular manner  see video below. here you can 
+      see the action being repeated indefinitly  as it goes round and round.  
+      </p>
+
+      <pre>
+ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0}, angular: {z: 1.5}}"
+      </pre>
+
+      <div class="video-container">
+        <video controls>
+            <source src="assets/videos/circle_turtle.mp4" type="video/mp4">
+
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </video>
+
+    <!-- Section 5 -->
+    <section id="services">
+      <h2>Understanding Services</h2>
+
+      <p>
+        <strong>Analogy:</strong> Services are like making a phone call. A request is
+        sent, and the caller waits for a response before continuing.
+      </p>
+
+      <p>
+        <strong>Topics vs Services:</strong>
+      </p>
+      <ul>
+        <li>Topics stream data continuously.</li>
+        <li>Services are used for one-time requests.</li>
+      </ul>
+
+      <pre>
+ros2 service list
+ros2 service call /clear std_srvs/srv/Empty
+      </pre>
+
+      <div class="placeholder">
+        Screenshot: service call clearing the turtlesim screen
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="parameters">
+      <h2>Understanding Parameters</h2>
+
+      <p>
+        <strong>Analogy:</strong> Parameters are like robot preferences or settings
+        that can be adjusted without changing the program code.
+      </p>
+
+      <p>
+        Parameters are useful in testing, development, and production environments
+        where behavior must be tuned dynamically.
+      </p>
+
+      <pre>
+ros2 param list /turtlesim
+ros2 param set /turtlesim background_r 255
+      </pre>
+
+      <p>
+        Parameter values can also be reset to defaults:
+      </p>
+
+      <pre>
+ros2 param set /turtlesim background_r 69
+      </pre>
+
+      <div class="placeholder">
+        Video: background color change using parameters
+      </div>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="actions">
+      <h2>Understanding Actions</h2>
+
+      <p>
+        Actions are similar to services but are designed for long-running tasks.
+        They provide feedback and allow goals to be canceled.
+      </p>
+
+      <p>
+        <strong>Actions vs Services:</strong> Actions are used when execution time
+        is significant or progress feedback is required.
+      </p>
+
+      <pre>
+ros2 action list
+      </pre>
+
+      <div class="placeholder">
+        Screenshot: action goal sent to rotate the turtle
+      </div>
+    </section>
+
+    <!-- Section 8 -->
+    <section id="rqt">
+      <h2>Using rqt_console, rqt_graph, and rosbag</h2>
+
+      <p>
+        The rqt tools provide visualization and debugging capabilities for ROS
+        systems.
+      </p>
+
+      <pre>
+rqt_graph
+      </pre>
+
+      <div class="placeholder">
+        Screenshot: rqt_graph showing node and topic connections
+      </div>
+
+      <p>
+        <strong>rosbag</strong> allows recording and replaying ROS data.
+      </p>
+
+      <pre>
+ros2 bag record -a
+      </pre>
+
+      <div class="placeholder">
+        Video: rosbag playback of turtle movement
+      </div>
+    </section>
+
+    <!-- Section 9 -->
+    <section id="launch">
+      <h2>Launching Nodes</h2>
+
+      <p>
+        Launch files allow multiple nodes to be started with a single command,
+        similar to starting an entire project with one click.
+      </p>
+
+      <div class="placeholder">
+        Video: turtlesim and teleop started using a launch file
+      </div>
+    </section>
+
+    <!-- Section 10 -->
+    <section id="choreo">
+      <h2>Turtle Choreography</h2>
+
+      <p>
+        This section demonstrates coordinated turtle motion using multiple ROS 2
+        features.
+      </p>
+
+      <ul>
+        <li>Seven turtles named after the seven dwarfs</li>
+        <li>Topic publishing using <code>cmd_vel</code></li>
+        <li>Service calls to reset and clear the screen</li>
+        <li>Parameter changes for background color</li>
+        <li>Action goals for precise rotation</li>
+        <li>Recording the choreography using rosbag</li>
+        <li>A launch file to start the entire performance</li>
+      </ul>
+
+      <p>
+        <strong>Theme:</strong> The seven dwarfs march together to mine diamonds,
+        ending with fireworks at the top corners of the screen.
+      </p>
+
+      <div class="placeholder">
+        Screenshot: final choreography formation
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

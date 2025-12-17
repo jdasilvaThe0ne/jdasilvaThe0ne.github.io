@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 4 – Simulation, Control, and Integration</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Profile -->
+  <div class="profile">
+    <img src="assets/img/me.jpeg" alt="Justino DaSilva">
+    <span>Justino DaSilva</span>
+  </div>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <h2>ROS 2 Labs</h2>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lab1.html">Lab 1 – Getting Started</a></li>
+      <li><a href="lab2.html">Lab 2 – Core Concepts</a></li>
+      <li><a href="lab3.html">Lab 3 – URDF & RViz2</a></li>
+      <li><a href="lab4.html">Lab 4 – Simulation & Control</a></li>
+    </ul>
+
+    <hr>
+
+    <ul>
+      <li><a href="#simulation">Simulation Overview</a></li>
+      <li><a href="#gazebo">Gazebo</a></li>
+      <li><a href="#controllers">Robot Control</a></li>
+      <li><a href="#cmdvel">Velocity Commands</a></li>
+      <li><a href="#integration">System Integration</a></li>
+      <li><a href="#testing">Testing & Validation</a></li>
+      <li><a href="#reflection">Reflection</a></li>
+    </ul>
+  </nav>
+
+  <!-- Content -->
+  <main class="content">
+
+    <!-- Section 1 -->
+    <section id="simulation">
+      <h2>Simulation in Robotics</h2>
+
+      <p>
+        Simulation is a critical stage in robotic system development. It allows
+        engineers to test designs, control algorithms, and system integration
+        before deploying software to real hardware.
+      </p>
+
+      <p>
+        In ROS 2, simulation environments closely mirror real-world execution by
+        using the same nodes, topics, services, and actions as physical robots.
+      </p>
+
+      <p>
+        This approach reduces risk, lowers cost, and enables rapid iteration.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="gazebo">
+      <h2>Gazebo Simulator</h2>
+
+      <p>
+        Gazebo is a 3D physics-based simulator commonly used with ROS 2. It provides:
+      </p>
+
+      <ul>
+        <li>Accurate physics simulation</li>
+        <li>Sensor emulation (lidar, camera, IMU)</li>
+        <li>Realistic robot-environment interaction</li>
+      </ul>
+
+      <p>
+        Gazebo integrates with ROS 2 through dedicated plugins, allowing simulation
+        data to be published as standard ROS topics.
+      </p>
+
+      <pre>
+gazebo
+      </pre>
+
+      <div class="placeholder">
+        Screenshot: Robot model spawned in Gazebo
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="controllers">
+      <h2>Robot Controllers</h2>
+
+      <p>
+        Controllers convert high-level commands into low-level actuator signals.
+        In ROS 2, controllers are typically managed using
+        <strong>ros2_control</strong>.
+      </p>
+
+      <p>
+        Common controller types include:
+      </p>
+
+      <ul>
+        <li>Joint position controllers</li>
+        <li>Joint velocity controllers</li>
+        <li>Effort controllers</li>
+      </ul>
+
+      <p>
+        Controllers provide a clean abstraction between software logic and hardware.
+      </p>
+
+      <div class="placeholder">
+        Diagram: Control pipeline from command to actuator
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="cmdvel">
+      <h2>Velocity Control Using <code>cmd_vel</code></h2>
+
+      <p>
+        The <code>cmd_vel</code> topic is a standard ROS interface used to control
+        mobile robots using velocity commands.
+      </p>
+
+      <p>
+        These commands specify:
+      </p>
+
+      <ul>
+        <li>Linear velocity (forward/backward)</li>
+        <li>Angular velocity (rotation)</li>
+      </ul>
+
+      <pre>
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.5}, angular: {z: 1.0}}"
+      </pre>
+
+      <p>
+        This interface is widely used because it is hardware-agnostic and easy to
+        integrate into higher-level planning systems.
+      </p>
+
+      <div class="placeholder">
+        Screenshot: Robot moving in simulation using cmd_vel
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="integration">
+      <h2>System Integration</h2>
+
+      <p>
+        System integration involves combining perception, planning, and control
+        into a single coordinated robotic system.
+      </p>
+
+      <p>
+        In ROS 2, integration is achieved through:
+      </p>
+
+      <ul>
+        <li>Standardized message interfaces</li>
+        <li>Launch files for orchestration</li>
+        <li>Parameter configuration</li>
+      </ul>
+
+      <p>
+        Launch files allow the entire simulation stack to be started with a single
+        command.
+      </p>
+
+      <pre>
+ros2 launch my_robot bringup.launch.py
+      </pre>
+
+      <div class="placeholder">
+        Screenshot: Multiple nodes running via launch file
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="testing">
+      <h2>Testing and Validation</h2>
+
+      <p>
+        Testing ensures that robot behavior in simulation matches expected outcomes.
+      </p>
+
+      <p>
+        Common validation steps include:
+      </p>
+
+      <ul>
+        <li>Verifying topic communication</li>
+        <li>Checking TF frame consistency</li>
+        <li>Monitoring controller responses</li>
+      </ul>
+
+      <p>
+        ROS 2 tools such as <code>rqt_graph</code> and <code>ros2 topic echo</code>
+        are essential for debugging.
+      </p>
+
+      <div class="placeholder">
+        Screenshot: rqt_graph showing full system
+      </div>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="reflection">
+      <h2>Reflection</h2>
+
+      <p>
+        This lab demonstrates how simulation bridges the gap between theory and
+        real-world robotic deployment.
+      </p>
+
+      <p>
+        By combining URDF modeling, TF coordination, controller management, and
+        velocity-based control, a complete robotic workflow is achieved.
+      </p>
+
+      <p>
+        Simulation-first development significantly improves reliability and safety
+        when transitioning to physical robots.
+      </p>
+    </section>
+
+  </main>
+
+</body>
+</html>

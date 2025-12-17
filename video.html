@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .video-container {
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      margin: auto;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+    }
+    .image-container {
+  max-width: 800px;
+  aspect-ratio: 16 / 9;
+  margin: auto;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* or 'contain' depending on your needs */
+}
+/* ===== Screenshot Wrapper ===== */
+.ros-screenshot {
+  margin: 0.75rem 0 1.25rem;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+/* ===== Screenshot Image ===== */
+.ros-screenshot img {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+/* ===== Screenshot Caption ===== */
+.ros-caption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* ===== Multiple Screenshots (Grid) ===== */
+.ros-screenshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* ===== Small Screens ===== */
+@media (max-width: 600px) {
+  .ros-screenshot img {
+    max-height: 260px;
+  }
+
+  .ros-caption {
+    font-size: 0.8rem;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+
+  <h2 style="text-align:center;">Responsive Video with Captions</h2>
+
+  <div class="video-container">
+    <video controls>
+      <source src="assets/videos/sub_pub.mp4" type="video/mp4">
+      <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+    </video>
+  </div>
+  
+  
+
+  <div class="ros-screenshot">
+    <img src="assets/img/ros2_version.png"
+         alt="URDF model loaded in RViz2">
+    <div class="ros-caption">
+      RViz2 displaying the URDF model after successful launch.
+    </div>
+  </div>
+
+  <p>
+    The URDF model was loaded using the robot_state_publisher node,
+    confirming correct link and joint definitions.
+  </p>
+</section>
+
+
+</body>
+</html>
