@@ -272,14 +272,16 @@ ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0}, angu
             <!-- Captions -->
             <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
         </video>
-
+    </div>
     <!-- Section 5 -->
     <section id="services">
       <h2>Understanding Services</h2>
 
       <p>
         <strong>Analogy:</strong> Services are like making a phone call. A request is
-        sent, and the caller waits for a response before continuing.
+        sent, and the caller waits for a response before continuing, unlike the topics 
+        service are one to one.  a unique channel i created for communication and ends 
+        by either  ther server or client.
       </p>
 
       <p>
@@ -289,15 +291,26 @@ ros2 topic pub /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0}, angu
         <li>Topics stream data continuously.</li>
         <li>Services are used for one-time requests.</li>
       </ul>
+      <p>The first commands shows hte list of services  available for call.  <b>Note:</b> if no node is 
+    active no services will be available for call</p>
 
       <pre>
 ros2 service list
 ros2 service call /clear std_srvs/srv/Empty
       </pre>
+     <p>   Command two clear any path that was create by the turle video below   for a clearer
+        understanding. If after calling clear  you attempt to move the turtle again you will see
+        it move an leave a trace. this is expected as the service call has completed(ended)
+        and the state has returned to normal
+     </p>
+       <div class="video-container">
+        <video controls>
+            <source src="assets/videos/clearing service.mp4" type="video/mp4">
 
-      <div class="placeholder">
-        Screenshot: service call clearing the turtlesim screen
-      </div>
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </videeo>
+        </video>
     </section>
 
     <!-- Section 6 -->
@@ -306,12 +319,16 @@ ros2 service call /clear std_srvs/srv/Empty
 
       <p>
         <strong>Analogy:</strong> Parameters are like robot preferences or settings
-        that can be adjusted without changing the program code.
+        that can be adjusted without changing the program code. thing that can passsed
+        directly to the th robot for example in a real robot  a paramerter could be  "turn on  head light 
+        brightness 75%", or night vision enable  if time >16:00. 
       </p>
 
       <p>
         Parameters are useful in testing, development, and production environments
-        where behavior must be tuned dynamically.
+        where behavior must be tuned dynamically fo the robtot to interact with it's environment 
+        intelligently. By setting  the red and blue color to 55 and the the green to 255 you ge the color shown in the image 
+        below
       </p>
 
       <pre>
@@ -319,17 +336,14 @@ ros2 param list /turtlesim
 ros2 param set /turtlesim background_r 255
       </pre>
 
-      <p>
-        Parameter values can also be reset to defaults:
-      </p>
 
-      <pre>
-ros2 param set /turtlesim background_r 69
-      </pre>
 
-      <div class="placeholder">
-        Video: background color change using parameters
-      </div>
+      <div class="ros-screenshot">
+        <img src="assets/img/parameter.png"
+             alt="node lis">
+        <div class="ros-caption">
+             list of node and detail on the turtlesim node  </div>
+     </div>
     </section>
 
     <!-- Section 7 -->
@@ -338,21 +352,37 @@ ros2 param set /turtlesim background_r 69
 
       <p>
         Actions are similar to services but are designed for long-running tasks.
-        They provide feedback and allow goals to be canceled.
+        They provide feedback and allow goals to be canceled. This behaivour is becessary 
+        as the robot environment may change  dynamically.  for examale if instruction is given
+        to the robot  move forward 12 feet but at feet 11  it hits  a wall. the feedback
+        provided by the by the action will allow the  instuction to be terminately 
+        prematurely. Or for a new instrtion to be given. 
       </p>
 
       <p>
         <strong>Actions vs Services:</strong> Actions are used when execution time
-        is significant or progress feedback is required.
+        is significant or progress feedback is required as described above. This is necessay given
+        that. not because you can do something means you should do it.  For example. if a robot is at the end of a cliff;
+        technically i can go forward. but the feed back may allow the central monitor to send a halt 
+        or danger-stop instruction. Below  we see that  the action available for the turtle is 
+        <b>turtle1/rotate_absolute</b>  in the video  theta means move the turtle 90 degree. counter 
+        clockwise.  <b>Note</b> if the turle is already  at  90 degree with respect to zero 
+        so don't think your turtle is broken when yoy don't see it move the second time i.e the new value must be differrent
+        if you  expect the turtle to move. 
       </p>
 
-      <pre>
+      <!--pre>
 ros2 action list
-      </pre>
+      </pre-->
 
-      <div class="placeholder">
-        Screenshot: action goal sent to rotate the turtle
-      </div>
+      <div class="video-container">
+        <video controls>
+            <source src="assets/videos/rotate.mp4" type="video/mp4">
+
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </videeo>
+        </video>
     </section>
 
     <!-- Section 8 -->
