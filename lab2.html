@@ -381,8 +381,8 @@ ros2 action list
 
             <!-- Captions -->
             <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
-        </videeo>
         </video>
+  
     </section>
 
     <!-- Section 8 -->
@@ -408,7 +408,7 @@ ros2 action list
 rqt_graph
       </pre>
       <p>
-        By running the above <code>rqt_graph</code>  a visual representation of the simulated robot is shown. In this case
+        By running the above command <code>rqt_graph</code>  a visual representation of the simulated robot is shown. In this case
         we have two nodes available. <code>teleop_turtle </code> and <code> turtlesim</code> it also displays  the relationship between 
         these town nodes such as the <code>topic</code> and <code>action</code>
       </p>
@@ -420,16 +420,45 @@ rqt_graph
      </div>
 
       <p>
-        <strong>rosbag</strong> allows recording and replaying ROS data.
+        <strong>rosbag</strong>: Rcording  and replaying events: Many times we want to  replay some actions as a demonstration for others. Rosbag allow us to do hits
+        it records data on nodes such as topics, sevices  and timestamps into a .bag file  so that thye can be replayed. It helps with debugging as 
+        <div class="ros-screenshot">
+        <img src="assets/img/dataflow_rosbag.png"
+             alt="rqt_graph">
+        <div class="ros-caption">RosBag Visual representation <br> <a href=https://www.reduct.store/blog/store-ros-topics>https://www.reduct.store/blog/store-ros-topics</a></div>
+     </div>
       </p>
+      <p><b>Advantages</b>
+           <ul>
+            <li>it is very good  for debuging  as you can replay events over and over 
+            </li>
+            <li>so indentfy what's causing the error.</li>
+            <li>since it records  topic message the can be analyzed even when the robot is offline</li>
+            <li>this offline debuggin allows for precise documentation of issues an successes</li>
+          </ul>
+          </p>
+            
+      <p><b>Disadvantages</b></p>
+    <ul>
+      <li>
+        <b>No advanced Filtering</b> It's made for debugging but does not have an advance 
+      tool for filtering and quering data    </li>
+      <li>No built int GUI</li> Rosbag is commandline and has no built in
+       graphical user interface so everything must be done throught the terminal which is quite tedious 
+    </ul>
 
       <pre>
 ros2 bag record -a
       </pre>
 
-      <div class="placeholder">
-        Video: rosbag playback of turtle movement
-      </div>
+
+      <div class="video-container">
+        <video controls>
+            <source src="assets/videos/rosbagplayback.mp4" type="video/mp4">
+
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </video>
     </section>
 
     <!-- Section 9 -->
@@ -438,12 +467,56 @@ ros2 bag record -a
 
       <p>
         Launch files allow multiple nodes to be started with a single command,
-        similar to starting an entire project with one click.
+        similar to starting an entire project with one click. For example so far we needed to open  a minimum of to terminals to  use the turtle simulator
+        <ol>
+          <li>turtlesim</li>
+          <li>teleop_turtle</li>
+        </ol>
+      Launch files can be created using three methods, <code> XML, YAML or Python</code> in this toturial we will be using Python if you wish to try the other methods please foloow <a href="https://docs.ros.org/en/humble/Tutorials/Intermediate/Launch/Creating-Launch-Files.html"> this tutorial</a> 
       </p>
+      <b>Python Lauch file, example code</b> 
+      <b>Note</b> xterm must be installed before running the launch file  elese nothing will happen
+      when you  press the corresponding keys to move.  much like when you run turtlesim and teleop_turtle  they
+      need to be in diffrent terminals( independent terminals) to capture keyboard input. 
 
-      <div class="placeholder">
-        Video: turtlesim and teleop started using a launch file
-      </div>
+      <pre>
+
+from launch import LaunchDescription
+from launch_ros.actions import Node
+from launch.actions import ExecuteProcess
+   
+def generate_launch_description():
+    return LaunchDescription([
+
+        # Start turtlesim normally
+        Node(
+            package='turtlesim',
+            executable='turtlesim_node',
+            output='screen'
+        ),
+
+        # Start teleop in a new terminal window
+        ExecuteProcess(
+            cmd=['xterm', '-e', 'ros2 run turtlesim turtle_teleop_key'],
+            output='screen'
+        ),
+    ])
+      </pre>
+    <p>
+
+    </p>
+
+      <div class="video-container">
+        <video controls>
+            <source src="assets/videos/LaunchFilelab2.mp4" type="video/mp4">
+
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </video>
+
+      
+      <div class="ros-caption">launching Tutrlesim and teleop_turtle with a launchfile</div>
+    </div>
     </section>
 
     <!-- Section 10 -->

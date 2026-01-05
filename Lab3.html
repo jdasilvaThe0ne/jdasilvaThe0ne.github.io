@@ -28,10 +28,10 @@
 
     <ul>
       <li><a href="#urdf">URDF Overview</a></li>
-      <li><a href="#structure">Robot Structure</a></li>
-      <li><a href="#joints">Links & Joints</a></li>
-      <li><a href="#tf">TF & TF2</a></li>
-      <li><a href="#rviz">RViz2</a></li>
+      <li><a href="#structure">Launch File</a></li>
+      <li><a href="#joints">Transforms TF and TF2</a></li>
+      <li><a href="#creative_task">Creative Task</a></li-->
+      <li><a href="#Understanding_check">"Understanding check</a></li>
       <li><a href="#launch">Launch Files</a></li>
       <li><a href="#rrbot">RRBot Comparison</a></li>
     </ul>
@@ -45,100 +45,395 @@
       <h2>URDF Overview</h2>
 
       <p>
+        A
         The <strong>Unified Robot Description Format (URDF)</strong> is an XML-based
         specification used in ROS 2 to describe the physical structure of a robot.
-      </p>
-
-      <p>
-        URDF defines:
-      </p>
-      <ul>
-        <li>Links (rigid bodies)</li>
-        <li>Joints (connections between links)</li>
-        <li>Visual, collision, and inertial properties</li>
-      </ul>
-
-      <p>
-        URDF files are typically stored in the <code>urdf/</code> directory of a ROS 2
+        It defines the diffferent parts of a robot, where  joints are positioned 
+        and is highly concenred with the actuators for these joints.   URDF files are typically stored in the <code>urdf/</code> directory of a ROS 2
         package.
       </p>
+
+      <!--p>
+        URDF defines:
+      </p-->
+      <ul>
+       
+        <li><b>Joints (connections between links):</b>> these as movable parts in the robot's body. They enable the robot 
+          to bend, twist an move in various directions.  Allowing them to performa tasks and interact witht the enviornment <a href="https://dorna.ai/blog/types-of-robot-joints/">Dorna Robotics</a>
+        </li>
+         <li><b>Links (rigid bodies):</b> Much like a bone, they are used to transmit the force apllied by the joint which cause the robot to excute an action <a href="https://ocw.mit.edu/courses/2-12-introduction-to-robotics-fall-2005/5c238d7e3445337ed40d4af83d9d2239_chapter3.pdf">Introuction to robotics (ch3) </a> and <a href="https://dorna.ai/blog/types-of-robot-joints/">Dorna Robotics</a></li>
+        <!--li>Visual, collision, and inertial properties</li-->
+
+
+      </ul--->
+      <p><b>RViz2 (visualization)</b></p>
+      <p>
+        RViz2 provides a graphical user interface so the robot  model and sensor data.
+      </p>
+       <p>
+        <b>Creating a URDF package</b>
+         <ul>
+          <li>
+            Create a folder with a subfolder called src  from your home directory and switch to that directory
+<pre>
+  cd 
+  mkdir -p ros2_ws2/src
+  cd ros2_ws2/src
+</pre>
+          </li>
+          <li>
+            build package stucture automatically 
+<pre>
+  ros2 pkg --build-type ament_python my_urdf_robot
+</pre>
+          </li>
+          <li>
+           create the robot Description file "simple_robot.urdf" under   a new <b>folder my_urdf_robot/urdf</b> with the below description
+<pre>
+cd 
+mkdir my_urdf_robot/urdf 
+nano my_urdf_robot/urdf/simple_robot.urdf 
+</pre>
+          and then add the follwing data
+          <pre>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;robot name=&quot;simple_bot&quot;&gt;
+  &lt;!-- Base link --&gt;
+  &lt;link name=&quot;base_link&quot;&gt;
+    &lt;visual&gt;
+      &lt;geometry&gt;
+       &lt;box size=&quot;0.4 0.4 0.2 &quot;/&gt;
+      &lt;/geometry&gt;
+    &lt;material name=&quot;blue&quot;/&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+
+  &lt;!-- Head link --&gt;
+  &lt;link name=&quot;head_link&quot;&gt;
+    &lt;visual&gt;
+      &lt;geometry&gt;
+        &lt;sphere radius=&quot;0.15&quot;/&gt;
+      &lt;/geometry&gt;
+    &lt;material name=&quot;red&quot;/&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+
+  &lt;!-- Joint --&gt;
+  &lt;joint name=&quot;base_to_head&quot; type=&quot;continuous&quot;&gt;
+    &lt;parent link=&quot;base_link&quot;/&gt;
+    &lt;child link=&quot;head_link&quot;/&gt;
+    &lt;origin xyz=&quot;0 0 0.25&quot;/&gt;
+  &lt;/joint&gt;
+&lt;/robot&gt;
+
+
+          </pre>
+                <p>
+      Once that is  finished we need to source the package, and start visulation of the robot you created change to the package folder and run the commands below
+      </p>
+<pre>
+  source install/setup.bash
+  rviz2
+  
+</pre>
+      <p>
+      <b>Note</b> in my case "WSL  or windows"  rviz does not respond  when is is run as a regular user(non root) research show that the user need to be part of the groups 
+      <b> video and render</b> however adding the user to these groups  stil results in the same behaivour. Therfore we need to run as root. 
+      </p>
+      <p>  if you expierence the same issue try adding the user to  the above mention groups Before running rviz2 as root <br>
+      verify groups and  add groups  respectively with the below commands
+<pre>
+  groups
+  sudo usermod -aG video,render
+</pre>li
+     
+          </li>
+          
+         </ul>
+          
+      </p>
+
+ Once rviz2 becomes responsive we need to tell it which robot we are visulizing. Do the following 
+ <ul>
+ <li>click add( bottom left)</li>
+ <li>click Robot model</li>
+ <li> in the new item that appear click decripton Source, change type to file </li>
+ <li> right below choose the file loctaion</li>
+ <li> at the top under global settings set fixed link to <b>base_link</b></li>
+  </ul>>
+  you should now see t a blue box with a white circle inside, and an error stating no transform found from base to head The blue box  represent the base and the white represent a missin part ( since we do not have any red item)
+  in our robot discription.  The joint connecting the  Base the head is contious and rviz2 needs it to be stabalised to determine where in space it it.<b> Note</b>  
+        </p>
+     <div class="ros-screenshot">
+        <img src="assets/img/transform_error.png"
+             alt="rqt_graph">
+        <div class="ros-caption">Rviz2 with error </div>
+     </div>
+  <p>
+    To fix this we need to create a transform for the joint,  In other words tell rviz2 what state the joint is in  so it can fix its positions in space.   Follow the steps to get things working. 
+    create a state publisher using the configuration file we created earlier, then publish the state. In two different terminals, run the below command.
+  <pre>
+ros2 run joint_state_publisher  joint_state_publisher
+ros2 run robot_state_publisher robot_state_publisher --ros-args   -p robot_description:="$(cat "~/ros2_ws2/src/my_urdf_robot/urdf/simple_robot.urdf)"
+  </pre>
+ 
+  Once you have run these two commands and added the robot model, you should now see a
+  <span style="color: blue; font-weight: bold;">blue square box</span> and a
+  <span style="color: red;font-weight: bold;">red circle</span>.
+    <div class="ros-screenshot">
+        <img src="assets/img/SimpleRobot.png"
+             alt="rqt_graph">
+        <div class="ros-caption"> Simple Robot with state published </div>
+     </div>
+  <p>
+</p>
+
+
     </section>
 
     <!-- Section 2 -->
     <section id="structure">
-      <h2>Robot Structure</h2>
+      <h2>Creating launch file </h2>
 
       <p>
-        The robot described in this lab is a simple articulated system composed of
-        a base and one or more movable links.
-      </p>
-
-      <p>
-        Example URDF snippet:
-      </p>
-
+        Above To ge the robot up and running  we were required to open three separate terminals one for
+        <ol>
+          <li>rviz2</li>
+          <li> read robot description</li>
+          <li> joint_state_publisher</li>
+        </ol>
+      Now lets create a launch file to start all these at once, once these are started we still neeed to select the robot model and and then set the base link 
+      in the launch file  you can see  all three instrucitons being invoked.  
       <pre>
-&lt;robot name="simple_bot"&gt;
-  &lt;link name="base_link"&gt;
-    &lt;visual&gt;
-      &lt;geometry&gt;
-        &lt;box size="0.4 0.4 0.2"/&gt;
-      &lt;/geometry&gt;
-    &lt;/visual&gt;
-  &lt;/link&gt;
-&lt;/robot&gt;
-      </pre>
+from launch import  LaunchDescription
+from launch_ros.actions import Node 
+def  generate_launch_description():
+    return LaunchDescription([
+        Node (
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            parameters=[{
+                'robot_description':open('~/ros2_ws2/src/my_urdf_robot/urdf/simple_robot.urdf').read()
+            }]
+        ),
+        Node(
+            package='joint_state_publisher',
+            executable='joint_state_publisher'
 
-      <div class="placeholder">
-        Screenshot: simple robot rendered in RViz2
+        ),
+        Node(
+            package='rviz2',
+            executable='rviz2'
+        ),
+    ])
+
+      </pre>
+        Store the file  in the location <code>~/ros2_ws2/install/my_urdf_robot/share/my_urdf_robot/display.launch.py</code>
+        and the execute with the below command. see the video below for a demo. 
+        <pre>
+ros2 launch my_urdf_robot display.launch.py
+        </pre>
+      </p>
+
+   <div class="video-container">
+        <video controls>
+            <source src="assets/videos/rviz2_launch.mp4" type="video/mp4">
+
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </video>
+        <div class="ros-caption">rviz2 via launch file</div>
       </div>
     </section>
 
     <!-- Section 3 -->
     <section id="joints">
-      <h2>Links and Joints</h2>
+      <h2>Transform TF and TF2</h2>
 
       <p>
-        Links represent rigid components, while joints define how those components
-        move relative to one another.
+      TF frames tells the orientation speed and direction of the different parts of the robot,  it tell  tell where 
+      ech part is relative to the other,or better said the base( actual positon of the robot itseld) of the robot.  whil tell where int the
+      environment the robot is
+      "tf2 is the transform library, which lets the user keep track of multiple coordinate frames over time. tf2 maintains the relationship between coordinate frames in a tree structure buffered in time and lets the user transform points, vectors, etc. between any two coordinate frames at any desired point in time."
+      <a href="https://docs.ros.org/en/kilted/Concepts/Intermediate/About-Tf2.html">Tf2 trnasforms</a>
+
+      In our example we have two links the head which can rotate and the base which is fixed . since we haven't move  any part as yet we see a single representation of the  x,y and z   axis represented by the blue read a green colors -- image one
+      <code> simple robot with TF</code> unlike image two <code> complex robot</code> which has made multiple movements 
+      of the x y and zy as
+      <div class="ros-screenshot">
+        <img src="assets/img/SimpleRobot_TF.png"
+             alt="rqt_graph">
+        <div class="ros-caption"> Simple Robot  with TF</div>
+     </div>
+     <div class="ros-screenshot">
+        <img src="assets/img/coplex_robot.png"
+             alt="rqt_graph">
+        <div class="ros-caption"> Complex Robot with TF <code><a href='https://docs.ros.org/en/kilted/Concepts/Intermediate/About-Tf2.html'>https://docs.ros.org/en/kilted/Concepts/Intermediate/About-Tf2.html</a></code></div>
+     </div>
       </p>
-
-      <p>
-        Common joint types include:
-      </p>
-
-      <ul>
-        <li>fixed</li>
-        <li>revolute</li>
-        <li>continuous</li>
-        <li>prismatic</li>
-      </ul>
-
-      <p>
-        Example revolute joint:
-      </p>
-
-      <pre>
-&lt;joint name="joint1" type="revolute"&gt;
-  &lt;parent link="base_link"/&gt;
-  &lt;child link="link1"/&gt;
-  &lt;origin xyz="0 0 0.2" rpy="0 0 0"/&gt;
-  &lt;axis xyz="0 0 1"/&gt;
-&lt;/joint&gt;
-      </pre>
-
-      <div class="placeholder">
-        Diagram: joint rotation axis visualization
-      </div>
     </section>
+    <section id="creative_task" > 
+       <h2>Creative Task</h2>
+        
+      <p>
+       Now we are going to add some more joint to our robot and change some colours, lets add as pair of hands a nose and a body
+        like a snowman the head  moves from left to right and the hands moves aproximately 250 degrees,  left and rigght will move in opposite directions as  they are on the opposite 
+        side of the body and they both need to move forward.  <b> Note </b> it is important to name each link ( left hand link, right hand_link) and joints   with  understandable name
+        as this helps to identity troubleshooting problems easilly. 
+         one finished he robot should look like this. 
+
+        <div class="ros-screenshot">
+        <img src="assets/img/advanced_robot.png"
+             alt="rqt_graph">
+        <div class="ros-caption"> Simple Robot With arms </div>
+     </div>
+      <pre>
+&lt;?xml version="1.0"?&gt;
+
+&lt;robot name="simple_bot"&gt;
+  &lt;material name="blue"&gt;
+    &lt;color rgba="0 0 1 1"/&gt;
+  &lt;/material&gt;
+
+  &lt;material name="red"&gt;
+    &lt;color rgba="1 0 0 1"/&gt;
+  &lt;/material&gt;
+
+  &lt;material name="green"&gt;
+    &lt;color rgba="0 1 0 1"/&gt;
+  &lt;/material&gt;
+
+  &lt;material name="orange"&gt;
+    &lt;color rgba="1 0.5 0 1"/&gt;
+  &lt;/material&gt;
+
+  &lt;material name="brown"&gt;
+    &lt;color rgba="1 0 1 1"/&gt;
+  &lt;/material&gt;
+
+  &lt;!-- Base link --&gt;
+  &lt;link name="base_link"&gt;
+    &lt;visual&gt;
+      &lt;geometry&gt;
+        &lt;box size="0.6 0.6 0.2"/&gt;
+      &lt;/geometry&gt;
+      &lt;material name="blue"/&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+
+  &lt;link name="body_link"&gt;
+    &lt;visual&gt;
+      &lt;geometry&gt;
+        &lt;cylinder radius="0.20" length="0.52"/&gt;
+      &lt;/geometry&gt;
+      &lt;material name="green"/&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+
+  &lt;joint name="base_to_body" type="fixed"&gt;
+    &lt;parent link="base_link"/&gt;
+    &lt;child link="body_link"/&gt;
+    &lt;origin xyz="0 0 0.35"/&gt;
+  &lt;/joint&gt;
+
+  &lt;!-- Head link --&gt;
+  &lt;link name="head_link"&gt;
+    &lt;visual&gt;
+      &lt;geometry&gt;
+        &lt;sphere radius="0.18"/&gt;
+      &lt;/geometry&gt;
+      &lt;material name="red"/&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+
+  &lt;joint name="body_to_head" type="revolute"&gt;
+    &lt;parent link="body_link"/&gt;
+    &lt;child link="head_link"/&gt;
+    &lt;origin xyz="0 0 0.40"/&gt;
+    &lt;axis xyz="0 0 1"/&gt;
+    &lt;limit lower="-1.57" upper="1.57" effort="1.0" velocity="1.0"/&gt;
+  &lt;/joint&gt;
+
+  &lt;!-- Nose link --&gt;
+  &lt;link name="nose_link"&gt;
+    &lt;visual&gt;
+      &lt;geometry&gt;
+        &lt;cylinder radius="0.03" length="0.1"/&gt;
+      &lt;/geometry&gt;
+      &lt;material name="orange"/&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+
+  &lt;joint name="head_to_nose" type="fixed"&gt;
+    &lt;parent link="head_link"/&gt;
+    &lt;child link="nose_link"/&gt;
+    &lt;origin xyz="0.15 0 0" rpy="0 1.5708 0"/&gt;
+  &lt;/joint&gt;
+
+  &lt;!-- Left arm --&gt;
+  &lt;link name="left_arm_link"&gt;
+    &lt;visual&gt;
+      &lt;origin xyz="0 0 -0.2"/&gt;
+      &lt;geometry&gt;
+        &lt;cylinder radius="0.03" length="0.4"/&gt;
+      &lt;/geometry&gt;
+      &lt;material name="brown"/&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+
+  &lt;joint name="left_arm_joint" type="revolute"&gt;
+    &lt;parent link="body_link"/&gt;
+    &lt;child link="left_arm_link"/&gt;
+    &lt;origin xyz="0 0.23 0.18"/&gt;
+    &lt;axis xyz="1 0 0"/&gt;
+    &lt;limit lower="-1.57" upper="1.57" effort="1" velocity="1"/&gt;
+  &lt;/joint&gt;
+
+  &lt;!-- Right arm --&gt;
+  &lt;link name="right_arm_link"&gt;
+    &lt;visual&gt;
+      &lt;origin xyz="0 0 -0.2"/&gt;
+      &lt;geometry&gt;
+        &lt;cylinder radius="0.03" length="0.4"/&gt;
+      &lt;/geometry&gt;
+      &lt;material name="brown"/&gt;
+    &lt;/visual&gt;
+  &lt;/link&gt;
+
+  &lt;joint name="right_arm_joint" type="revolute"&gt;
+    &lt;parent link="body_link"/&gt;
+    &lt;child link="right_arm_link"/&gt;
+    &lt;origin xyz="0 -0.23 0.18"/&gt;
+    &lt;axis xyz="1 0 0"/&gt;
+    &lt;limit lower="-1.57" upper="1.57" effort="1" velocity="1"/&gt;
+  &lt;/joint&gt;
+
+&lt;/robot&gt;
+</pre>
+
+      </p>
+      
+      </section>
+    
 
     <!-- Section 4 -->
-    <section id="tf">
-      <h2>TF and TF2</h2>
+    <section id="Understanding_check">
+      <h2>Understanding check</h2>
+      <ul>
+        <li><b> URDF</b>  this  is a logical representation of the robot. it describes where each part(link) is connected 
+         its size and cololur</li>
+         <li><b>link</b> discribes a singel part of the robot for example a a head( a sphere whe radius of 1 adn has a the color read)  the hand( a cylinder with 
+         radius 0.03 and has a length of 0.4 </li>
+         <li><b>joint</b> describe the relationship between two links for example link1(hand) can move up and down about the axis covering aproximately 250 degrees</li>
+         <li><b>Rviz2</b> used for visualizing the robot.  It's good  for helping you collect the correct data  with the aid visual feedback</li>
+         <!--li><b>TF tree</b> a tree like representation of the robot. it shows how links connect to each other</li-->
 
-      <p>
+      </ul>
+
+      <!---p>
         TF is the ROS system responsible for keeping track of multiple coordinate
         frames over time.
+        
       </p>
 
       <p>
@@ -162,64 +457,12 @@ ros2 run tf2_tools view_frames
       <div class="placeholder">
         Screenshot: TF tree generated from URDF
       </div>
-    </section>
+    </section---!-->
 
     <!-- Section 5 -->
-    <section id="rviz">
-      <h2>Visualizing the Robot in RViz2</h2>
+    
 
-      <p>
-        RViz2 is a 3D visualization tool used to inspect robot models, sensor data,
-        and coordinate frames.
-      </p>
-
-      <p>
-        To display a URDF model:
-      </p>
-
-      <pre>
-ros2 run joint_state_publisher_gui joint_state_publisher_gui
-ros2 run robot_state_publisher robot_state_publisher simple_bot.urdf
-      </pre>
-
-      <p>
-        The <strong>RobotModel</strong> display type must be added in RViz2, with
-        the correct <code>robot_description</code> parameter selected.
-      </p>
-
-      <div class="placeholder">
-        Screenshot: RViz2 showing robot model with TF frames
-      </div>
-    </section>
-
-    <!-- Section 6 -->
-    <section id="launch">
-      <h2>Launch Files</h2>
-
-      <p>
-        Launch files allow multiple ROS 2 nodes to be started together with a
-        single command.
-      </p>
-
-      <p>
-        A Python launch file may start:
-      </p>
-
-      <ul>
-        <li>robot_state_publisher</li>
-        <li>joint_state_publisher</li>
-        <li>RViz2</li>
-      </ul>
-
-      <p>
-        This ensures consistent startup and reduces configuration errors.
-      </p>
-
-      <div class="placeholder">
-        Code snippet: Python launch file for RViz2
-      </div>
-    </section>
-
+    
     <!-- Section 7 -->
     <section id="rrbot">
       <h2>RRBot Comparison</h2>
