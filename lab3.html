@@ -32,7 +32,7 @@
       <li><a href="#joints">Transforms TF and TF2</a></li>
       <li><a href="#creative_task">Creative Task</a></li-->
       <li><a href="#Understanding_check">"Understanding check</a></li>
-      <li><a href="#launch">Launch Files</a></li>
+      <li><a href="#model_import">Using Existing Models</a></li>
       <li><a href="#rrbot">RRBot Comparison</a></li>
     </ul>
   </nav>
@@ -280,13 +280,26 @@ ros2 launch my_urdf_robot display.launch.py
         like a snowman the head  moves from left to right and the hands moves aproximately 250 degrees,  left and rigght will move in opposite directions as  they are on the opposite 
         side of the body and they both need to move forward.  <b> Note </b> it is important to name each link ( left hand link, right hand_link) and joints   with  understandable name
         as this helps to identity troubleshooting problems easilly. 
-         one finished he robot should look like this. 
+         one finished the robot should look like this. 
 
         <div class="ros-screenshot">
         <img src="assets/img/advanced_robot.png"
              alt="rqt_graph">
         <div class="ros-caption"> Simple Robot With arms </div>
      </div>
+     Here is a  short video of the robot with  movings parts, the code is provided below. the arms move in  the wrong directions, but  the objective her is to have the  joints mov, the movement direction 
+     can be acompliched  by adjusting the  robot discription file to suite the direction you require. <br>
+     <br>
+
+     <div class="video-container">
+        <video controls>
+            <source src="assets/videos/moving_parts.mp4" type="video/mp4">
+
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </video>
+        <div class="ros-caption">Robots with moving parts</div>
+      </div>
       <pre>
 &lt;?xml version="1.0"?&gt;
 
@@ -416,7 +429,7 @@ ros2 launch my_urdf_robot display.launch.py
       </section>
     
 
-    <!-- Section 4 -->
+    <!-- Section 7 -->
     <section id="Understanding_check">
       <h2>Understanding check</h2>
       <ul>
@@ -463,20 +476,69 @@ ros2 run tf2_tools view_frames
     
 
     
-    <!-- Section 7 -->
-    <section id="rrbot">
-      <h2>RRBot Comparison</h2>
+    <!-- Section 8 -->
+    <section id="model_impor">
+      <h2> Using Existing models <b>GAZEBO SIMULATION</b></h2>
+       <p>So far we have build our own robot and package, now lets use an existing one package and use it to display a simple rbot with three joint. Install the basic tools use the below commands
+<pre>
+sudo apt update
+sudo apt update
+sudo apt install \
+ros-jazzy-ros2-control \
+ros-jazzy-ros2-controllers \
+ros-jazzy-gz-ros2-control \
+ros-jazzy-gz-ros2-control-demos
 
-      <p>
-        The RRBot example is a reference robot used in ROS documentation to
-        demonstrate a two-link revolute manipulator.
+</pre>
+</p>   <p>
+Now lets install the a  pre built robot with threee joints,  the spourcecode for the robot can be found at <code> Example 1</code> from <a  ahref="https://github.com/ros-controls/ros2_control_demos.git">this</a><code>github repository </code>
+once completed install the dependencies. 
+before getting started  create a project folder with a src directory and clone the above repository into it, and  run install  from  source the set the source
+<pre> 
+mkdir ~/ros2_ws/src
+cd ~/ros2_ws/src
+git clone https://github.com/ros-controls/ros2_control_demos.git 
+cd ..
+# install from source
+rosdep install --from-paths src --ignore-src -r -y</pre>
+# set the source 
+source /home/ros2_ws/install/setup.bash
+
+if an error is produce you man need to install rosdep use 
+<pre>sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository universe
+sudo apt update
+</pre>
+<p> As you may need to add the universe repository first. then retry <code>rosdep install --from-paths src --ignore-src -r -y</code> 
+Once everything runs fine use the following command to view the robot the image below shows the robot witht eh tframes added. Don't forget to add the source before executing this command, otherwise it 
+will produce file not found error </p> 
+
+<div class="ros-screenshot">
+        <img src="assets/img/rrbot.png"
+             alt="rqt_graph">
+        <div class="ros-caption"> RRBOt </div>
+     </div>
+<p>
+Now lets have a look at wht the tf2 frames look like. in the <b>Image below</b> We see the base_link, the primary link which is connected to the canvas(world) the tranforms   shows that 
+state update  at a rate of (10hz) or ten times per second and there is not conflicts. implies that transforms are smooth.   Sees TF graph below.
+
+<div class="ros-screenshot">
+        <img src="assets/img/TFtFrames.png"
+             alt="rqt_graph">
+        <div class="ros-caption"> Tf2_frame</div>
+     </div>
+<div class="ros-screenshot">
+        <img src="assets/img/Tftree.png"
+             alt="rqt_graph">
+        <div class="ros-caption"> TFtree RRobt</div>
+     </div>
+</p>
+
+
       </p>
 
-      <p>
-        Comparison with this lab’s robot:
-      </p>
-
-      <ul>
+      <!--ul>
         <li>Both use revolute joints</li>
         <li>Both rely on TF for frame transforms</li>
         <li>RRBot includes more detailed inertial modeling</li>
@@ -488,7 +550,7 @@ ros2 run tf2_tools view_frames
 
       <div class="placeholder">
         Screenshot: RRBot displayed in RViz2
-      </div>
+      </div-->
     </section>
 
   </main>
