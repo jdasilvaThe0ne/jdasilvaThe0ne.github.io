@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <title>Lab 3 – URDF, TF, and RViz2</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <script> 
+    function toggleCode(button){
+      const wrapper =button.nextElementSibling;
+      wrapper.classList.toggle("expanded");
+        button.textContent=wrapper.classList.contains("expanded")
+        ?"hide_code"
+        :"show_code";
+      
+    }
+  </script>
 </head>
 <body>
 
@@ -21,7 +31,7 @@
       <li><a href="lab1.html">Lab 1 – Getting Started</a></li>
       <li><a href="lab2.html">Lab 2 – Core Concepts</a></li>
       <li><a href="lab3.html">Lab 3 – URDF & RViz2</a></li>
-      <!--li><a href="lab4.html">Lab 4 – Simulation & Control</a></li-->
+      <li><a href="lab4.html">Lab 4 – Simulation & Control</a></>
     </ul>
 
     <hr>
@@ -45,7 +55,6 @@
       <h2>URDF Overview</h2>
 
       <p>
-        A
         The <strong>Unified Robot Description Format (URDF)</strong> is an XML-based
         specification used in ROS 2 to describe the physical structure of a robot.
         It defines the diffferent parts of a robot, where  joints are positioned 
@@ -58,17 +67,17 @@
       </p-->
       <ul>
        
-        <li><b>Joints (connections between links):</b>> these as movable parts in the robot's body. They enable the robot 
-          to bend, twist an move in various directions.  Allowing them to performa tasks and interact witht the enviornment <a href="https://dorna.ai/blog/types-of-robot-joints/">Dorna Robotics</a>
+        <li><b>Joints (connections between links):</b>> these are movable parts in the robot's body. They enable the robot 
+          to bend, twist and move in various directions.  Allowing them to performa tasks and interact with the environnment <a href="https://dorna.ai/blog/types-of-robot-joints/">Dorna Robotics</a>
         </li>
          <li><b>Links (rigid bodies):</b> Much like a bone, they are used to transmit the force apllied by the joint which cause the robot to excute an action <a href="https://ocw.mit.edu/courses/2-12-introduction-to-robotics-fall-2005/5c238d7e3445337ed40d4af83d9d2239_chapter3.pdf">Introuction to robotics (ch3) </a> and <a href="https://dorna.ai/blog/types-of-robot-joints/">Dorna Robotics</a></li>
         <!--li>Visual, collision, and inertial properties</li-->
 
 
-      </ul--->
+      </ul>
       <p><b>RViz2 (visualization)</b></p>
       <p>
-        RViz2 provides a graphical user interface so the robot  model and sensor data.
+        RViz2 provides a graphical user interface so the user can see the  the robot  model and sensor data.
       </p>
        <p>
         <b>Creating a URDF package</b>
@@ -84,7 +93,7 @@
           <li>
             build package stucture automatically 
 <pre>
-  ros2 pkg --build-type ament_python my_urdf_robot
+  ros2 pkg create --build-type ament_python my_urdf_robot
 </pre>
           </li>
           <li>
@@ -93,6 +102,7 @@
 cd 
 mkdir my_urdf_robot/urdf 
 nano my_urdf_robot/urdf/simple_robot.urdf 
+
 </pre>
           and then add the follwing data
           <pre>
@@ -129,11 +139,16 @@ nano my_urdf_robot/urdf/simple_robot.urdf
 
           </pre>
                 <p>
-      Once that is  finished we need to source the package, and start visulation of the robot you created change to the package folder and run the commands below
+      we have created the package structure whit the above command <code>ros2 pkg create --build-type ament_python my_urdf_rob</code>  but now we need to build the pakage with viable date
+      tell ros to use the  file we just created. switch back to the base  folder  the  <b> project name</b>
+      Once that is  finished we need to source the package, and start visulation of the robot you created change to the package folder and run the commands below in the same order. If all goes well you should see the robot 
+      appear
       </p>
 <pre>
-  source install/setup.bash
-  rviz2
+cd  ~/ros2_ws/
+colcon  build
+source install/setup.bash
+rviz2
   
 </pre>
       <p>
@@ -145,7 +160,7 @@ nano my_urdf_robot/urdf/simple_robot.urdf
 <pre>
   groups
   sudo usermod -aG video,render
-</pre>li
+</pre>
      
           </li>
           
@@ -153,16 +168,16 @@ nano my_urdf_robot/urdf/simple_robot.urdf
           
       </p>
 
- Once rviz2 becomes responsive we need to tell it which robot we are visulizing. Do the following 
+ Once rviz2 becomes responsive we need to tell it which robot we are visualizing. Do the following 
  <ul>
  <li>click add( bottom left)</li>
  <li>click Robot model</li>
- <li> in the new item that appear click decripton Source, change type to file </li>
+ <li> in the new item that appear click descripton Source,  and change type to file </li>
  <li> right below choose the file loctaion</li>
- <li> at the top under global settings set fixed link to <b>base_link</b></li>
-  </ul>>
-  you should now see t a blue box with a white circle inside, and an error stating no transform found from base to head The blue box  represent the base and the white represent a missin part ( since we do not have any red item)
-  in our robot discription.  The joint connecting the  Base the head is contious and rviz2 needs it to be stabalised to determine where in space it it.<b> Note</b>  
+ <li> at the top under global settings set fixed_frame to <b>base_link</b></li>
+ </ul>
+  you should now see a blue box with a white circle inside, and an error stating no transform found from base to head The blue box  represent the base and the white represent a missing part. which should be a red cicle that represents the head.
+  <b>Reason: </b>The joint connecting the  Base the head is contious and rviz2 needs it to be stabalised to determine where in space it it see image below. 
         </p>
      <div class="ros-screenshot">
         <img src="assets/img/transform_error.png"
@@ -170,8 +185,10 @@ nano my_urdf_robot/urdf/simple_robot.urdf
         <div class="ros-caption">Rviz2 with error </div>
      </div>
   <p>
-    To fix this we need to create a transform for the joint,  In other words tell rviz2 what state the joint is in  so it can fix its positions in space.   Follow the steps to get things working. 
-    create a state publisher using the configuration file we created earlier, then publish the state. In two different terminals, run the below command.
+    <b>To fix</b> this we need to create a transform for the joint  let is exist somewhere relative to the base ,  
+    In other words tell rviz2 what state the joint is in  so it can fix its positions in space.   Follow the steps 
+    to get things working. Create a state publisher using the configuration file we created earlier
+    <code>simple_robot.urdf</code>, the tell rviz2 where it it  /(publish the state). In two different terminals, run the below command.
   <pre>
 ros2 run joint_state_publisher  joint_state_publisher
 ros2 run robot_state_publisher robot_state_publisher --ros-args   -p robot_description:="$(cat "~/ros2_ws2/src/my_urdf_robot/urdf/simple_robot.urdf)"
@@ -179,7 +196,9 @@ ros2 run robot_state_publisher robot_state_publisher --ros-args   -p robot_descr
  
   Once you have run these two commands and added the robot model, you should now see a
   <span style="color: blue; font-weight: bold;">blue square box</span> and a
-  <span style="color: red;font-weight: bold;">red circle</span>.
+  <span style="color: red;font-weight: bold;">red circle</span>  <span style="color:#4f46e5;font-weight: bold;">Note these command needs to be run as root. else  
+    you wouldn't be able to click the button. 
+  </span> 
     <div class="ros-screenshot">
         <img src="assets/img/SimpleRobot.png"
              alt="rqt_graph">
@@ -196,7 +215,7 @@ ros2 run robot_state_publisher robot_state_publisher --ros-args   -p robot_descr
       <h2>Creating launch file </h2>
 
       <p>
-        Above To ge the robot up and running  we were required to open three separate terminals one for
+        So far to get the robot up and running  we were required to open three separate terminals one for
         <ol>
           <li>rviz2</li>
           <li> read robot description</li>
@@ -251,9 +270,7 @@ ros2 launch my_urdf_robot display.launch.py
       <h2>Transform TF and TF2</h2>
 
       <p>
-      TF frames tells the orientation speed and direction of the different parts of the robot,  it tell  tell where 
-      ech part is relative to the other,or better said the base( actual positon of the robot itseld) of the robot.  whil tell where int the
-      environment the robot is
+      TF frames tell us  how a robot par can move,  the degree of freedom each par has ,  it  is use to tell ros where a part is relative to its base( a fized frame) and the position to draw(display that par/link)
       "tf2 is the transform library, which lets the user keep track of multiple coordinate frames over time. tf2 maintains the relationship between coordinate frames in a tree structure buffered in time and lets the user transform points, vectors, etc. between any two coordinate frames at any desired point in time."
       <a href="https://docs.ros.org/en/kilted/Concepts/Intermediate/About-Tf2.html">Tf2 trnasforms</a>
 
@@ -278,7 +295,7 @@ ros2 launch my_urdf_robot display.launch.py
       <p>
        Now we are going to add some more joint to our robot and change some colours, lets add as pair of hands a nose and a body
         like a snowman the head  moves from left to right and the hands moves aproximately 250 degrees,  left and rigght will move in opposite directions as  they are on the opposite 
-        side of the body and they both need to move forward.  <b> Note </b> it is important to name each link ( left hand link, right hand_link) and joints   with  understandable name
+        side of the body and they both need to move forward.  <b> Note </b> it is important to name each link ( left hand link, right hand_link) and joints   with  descriptable names
         as this helps to identity troubleshooting problems easilly. 
          one finished the robot should look like this. 
 
@@ -290,6 +307,8 @@ ros2 launch my_urdf_robot display.launch.py
      Here is a  short video of the robot with  movings parts, the code is provided below. the arms move in  the wrong directions, but  the objective her is to have the  joints mov, the movement direction 
      can be acompliched  by adjusting the  robot discription file to suite the direction you require. <br>
      <br>
+     <p>The modifid urdf code has been provided below for your convinience</p>
+      <p class=resolved>to resol</p>
 
      <div class="video-container">
         <video controls>
@@ -300,7 +319,9 @@ ros2 launch my_urdf_robot display.launch.py
         </video>
         <div class="ros-caption">Robots with moving parts</div>
       </div>
-      <pre>
+      <button onclick="toggleCode(this)">show_code</button>
+      
+      <pre class="large_code">
 &lt;?xml version="1.0"?&gt;
 
 &lt;robot name="simple_bot"&gt;
@@ -423,6 +444,7 @@ ros2 launch my_urdf_robot display.launch.py
 
 &lt;/robot&gt;
 </pre>
+
 
       </p>
       

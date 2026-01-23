@@ -143,7 +143,44 @@ pre {
   font-size: 0.95em;
   margin-top: 12px;
 }
+/* Base style for large code blocks */
+pre.large_code {
+  max-height: 220px;          /* visible height */
+  overflow-y: hidden;           /* hide overflow */
+  overflow-x:auto;
+  position: relative;
+  padding: 16px;
+  background: #111;
+  color: #eaeaea;
+  
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
 
+
+
+/* Fade-out effect at bottom */
+pre.large_code::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(30,30,30,0), rgba(30,30,30,1));
+  pointer-events: none;
+}
+
+/* Remove fade when expanded */
+pre.large_code.expanded::after {
+  display: none;
+}
+/* Expanded state */
+pre.large_code.expanded {
+  max-height: none;
+  overflow: auto;
+}
 .code-keyword,
 .code-blue {
   color: red;
@@ -382,6 +419,7 @@ pre {
 /* ===== Screenshot Caption ===== */
 .ros-caption {
   margin-top: 0.5rem;
+  overflow: hidden;
   font-size: 0.85rem;
   color: #94a3b8;
   line-height: 1.4;
@@ -434,4 +472,14 @@ pre {
     font-size: 0.95rem;
     padding: 0.75rem;
   }
+}
+.resolved {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border-left: 5px solid #198754;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
 }

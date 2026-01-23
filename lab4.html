@@ -21,19 +21,21 @@
       <li><a href="lab1.html">Lab 1 – Getting Started</a></li>
       <li><a href="lab2.html">Lab 2 – Core Concepts</a></li>
       <li><a href="lab3.html">Lab 3 – URDF & RViz2</a></li>
-      <li><a href="lab4.html">Lab 4 – Simulation & Control</a></li>
     </ul>
 
     <hr>
 
     <ul>
       <li><a href="#simulation">Simulation Overview</a></li>
-      <li><a href="#gazebo">Gazebo</a></li>
-      <li><a href="#controllers">Robot Control</a></li>
-      <li><a href="#cmdvel">Velocity Commands</a></li>
-      <li><a href="#integration">System Integration</a></li>
-      <li><a href="#testing">Testing & Validation</a></li>
-      <li><a href="#reflection">Reflection</a></li>
+      <li><a href="#gazebo">Installing Gazebo</a></li>
+      <li> <a href="#launching"> Starting Gazebo </a></li>
+      <li><a href="spawning"> Spaning URDF </a></li>
+      <li><a href="#inspection">Inspection of gazebo Nodes</a></li>
+
+      <li><a href="Movements">Robot movements</a></li>
+      <li><a href="Contorllers"> Adding Contollers</a></li>
+      <li><a href="#Understanding">Understanding checks</a></li>
+     
     </ul>
   </nav>
 
@@ -42,192 +44,319 @@
 
     <!-- Section 1 -->
     <section id="simulation">
-      <h2>Simulation in Robotics</h2>
+      <h2>1. Simulation in Robotics</h2>
 
       <p>
-        Simulation is a critical stage in robotic system development. It allows
-        engineers to test designs, control algorithms, and system integration
-        before deploying software to real hardware.
-      </p>
-
-      <p>
-        In ROS 2, simulation environments closely mirror real-world execution by
+        We have looked at rviz2 for visualizing  our Robot so far.  But that is all it does visualize, it does not take into consideration
+        the state of the world we live in such as gravity and friction. Gazebo one the other hand include these real world 
+        attributes. It helps us to simulate robots actions in a  controled real world environment, before actually excuting instuction on a physical Robot
+        Simulation is a critical in robot develoment . It allows us to test designs, control algorithms, and system integration
+        before deploying software to real hardware.  and of course it saves  a lot of money  that might be casuse buy faulty hardware or 
+          In ROS 2, simulation environments closely mirror real-world execution by
         using the same nodes, topics, services, and actions as physical robots.
       </p>
+    </section>
+    <section  id="gazebo">
+      <h2>2. Installing Gazebo</h2>
+       <p>
+        lets get started by installing  gazebo 
+<pre>sudo apt install 
+sudo apt install ros-jazzy-ros-gz</pre>
+       once everything runs smoothly we'll check the version of  gazebo that is installed 
+       <pre> gz sim --version</pre>
+        <div class="ros-screenshot">
+        <img src="assets/img/Gazebo_version.png"
+             alt="rqt_graph">
+        <div class="ros-caption">Gazebo_version</div>
+     </div>
+     
+
+      </p>
+      </section>
+      <section id="launching">
+        <h2>3. Starting Gazebo</h2>
+    
+      <p>
+        by running <code> gz sim</code> or <code> gz sim empty.sdf</code> an emtpy environment with light and an ground plane <b> The Earth</b>
+       <div class="ros-screenshot">
+        <img src="assets/img/GazeboEmpty.png"
+             alt="rqt_graph">
+        <div class="ros-caption">Empty Gazebo world  </div>
+     </div>
+     </p>
+     </section>
+
+     <section id="spanning">
+      <h2>4. Spawning simple_bot</h2>
+     <p>
+       we can clone(spawn) the robot that we created in the previous lab  and place in in  the empty world.  However some changes needs to be made before we can do this successully. 
+       You will see the following error if  you try to clone the  urdf into gazebo.Here is how to do that 
+       First  Terminal 1 open the empty world <code>gz sim empty.sdf</code>
+       then in a different terminal  run <code> sos2 run ros_gz_sim create file &ltpath to urdfile&gt/filename.urdf </code>
+<pre>
+# terminal 1
+gz sim empty.sdf
+
+#terminal 2
+ros2 run ros_gz_sim create /aboullePathToFile/simple_robot.urdf -name simple_bot -x0 -y 0 -z 4
+
+</pre>
+<div class="video-container">
+  <video controls>
+      <source src="assets/videos/FailedSpanning.mp4" type="video/mp4">
+
+      <!-- Captions -->
+      <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+  </video>
+  <div class="ros-caption">Successfull spanning but with failed gazebo</div>
+</div>
+         </p>
+      
+       This command will report that  it ran successfully, however in the terminnal that 
+       you ran  gz sim empty.sdf  an error stating that  the base link has not inertial( mass). We nust add inertial to each  link  gazebo  would interpret these link as being infinite ans comlain that they have no mass
+       and that it doesn't know it relative position.  The error appears and  no robot is shown 
+
+      <p class="error">
+        Error Code 19: Msg: urdf2sdf: link[base_link] has no <inertial> block defined. Please ensure this link has a valid mass to prevent any missing links or joints in the resulting SDF model.
+Error Code 19: Msg: urdf2sdf: allowing joint lumping by removing any <disableFixedJointLumping> or <preserveFixedJoint> gazebo tag on fixed child joint[base_to_body], as well as ensuring that ParserConfig::URDFPreserveFixedJoint is false, could help resolve this warning. See http://sdformat.org/tutorials?tut=sdformat_urdf_extensions for more information about this behavior.
+Error Code 19: Msg: urdf2sdf: [1] child joints ignored.
+Error Code 19: Msg: urdf2sdf: [1] child links ignored.
+Warning [parser_urdf.cc:2777] Error Code 19: Msg: urdf2sdf: link[base_link] is not modeled in sdf.[Err] [UserCommands.cc:928] Error Code 17: Msg: A model must have at least one link.
+[Err] [UserCommands.cc:928] Error Code 17: Msg: A model must have at least one link.
+[Err] [UserCommands.cc:928] Error Code 25: Msg: FrameAttachedToGraph error: scope context name[] does not match __model__ or world.
+[Err] [UserCommands.cc:928] Error Code 23: Msg: attached_to name[base_link] specified by frame with name[base_to_body] does not match a nested model, link, joint, or frame name in model with name[simple_bot].
+[Err] [UserCommands.cc:928] Error Code 23: Msg: attached_to name[head_link] specified by frame with name[head_to_nose] does not match a nested model, link, joint, or frame name in model with name[simple_bot].
+[Err] [UserCommands.cc:928] Error Code 28: Msg: PoseRelativeToGraph error, Vertex with name [simple_bot::base_to_body] is disconnected; it should have 1 incoming edge in MODEL relative_to graph.
+[Err] [UserCommands.cc:928] Error Code 28: Msg: PoseRelativeToGraph error, Vertex with name [simple_bot::head_to_nose] is disconnected; it should have 1 incoming edge in MODEL relative_to graph.
+[Err] [UserCommands.cc:928] Error Code 28: Msg: PoseRelativeToGraph unable to find path to source vertex when starting from vertex with id [3].
+[Err] [UserCommands.cc:928] Error Code 28: Msg: PoseRelativeToGraph unable to find path to source vertex when starting from vertex with id [4].
+[Err] [UserCommands.cc:928] Error Code 28: Msg: PoseRelativeToGraph unable to find path to source vertex when starting from vertex with id [5].
+[Err] [UserCommands.cc:928] Error Code 28: Msg: PoseRelativeToGraph unable to find path to source vertex when starting from vertex with id [6].
+      </p>
 
       <p>
+        Add inertia to each link using a code block simple to the one below. with each link haveing a diferent mass.
+        The example below show the interia and mass for the base link which is 5. In our  demo its the heavest part of th robot.  this means that
+        the body could have a mass of about 3.0 for example. afer this is added  we restart gzebo  and rerun the clone command and the robot will appear.  in the position passed to the clone command  <code>
+          -x 0 -y 0 -z 4 </code>tell the robot to start its  starting postionn is 4 units above the  surface of the ground. when you press the play button 
+          show at the bottom of the gazebo window you will see it fall. 
+        
+   <pre>
+&lt;inertial&gt;
+  &lt;origin xyz="0 0 0"/&gt;
+  &lt;mass value="5.0"/&gt;
+  &lt;inertia
+    ixx="0.2" ixy="0.0" ixz="0.0"
+    iyy="0.2" iyz="0.0"
+    izz="0.2"/&gt;
+&lt;/inertial&gt;
+
+</pre>
+
+
+<div class="video-container">
+  <video controls>
+      <source src="assets/videos/ineertiaOnly.mp4" type="video/mp4">
+
+      <!-- Captions -->
+      <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+  </video>
+  <div class="ros-caption">Inertial added to Ronbot Description</div>
+</div>
+<p>
+This alone wouldn't solve our issue however. If you click play  in the gazebo  interface with only  <code>&ltinertial&gt </code> the robot would fall right through the  ground
+to prevent this we must add collision to each link so it knows to stop when it hits and esternal object<b> the ground</b> see the two videos below.  before and after addting collision to the robot defintion. <b> Note: both geometry and dimension
+collision must have the same dimension to detect precise contact in the second video we place the robot at 4 units above the ground so the fall can be well observed. 
+</b>
+<pre>
+&lt;collision&gt;
+&lt;geometry&gt;
+  &lt;cylinder radius=&quot;0.03&quot; length=&quot;0.4&quot;/&gt;
+&lt;/geometry&gt;
+&lt;/collision&gt;
+
+</pre>
+    
+<div class="video-container">
+
+  <video controls>
+      <source src="assets/videos/CollisionDetected.mp4" type="video/mp4">
+
+      <!-- Captions -->
+      <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+  </video>
+  <div class="ros-caption">Collision and interia added</div>
+</div>
         This approach reduces risk, lowers cost, and enables rapid iteration.
       </p>
     </section>
 
+
     <!-- Section 2 -->
-    <section id="gazebo">
-      <h2>Gazebo Simulator</h2>
+    <section id="inspection">
+      <h2>5. Inspection of gazebo Nodes</h2>
 
       <p>
-        Gazebo is a 3D physics-based simulator commonly used with ROS 2. It provides:
+        After we have successfull moffied the urdf file and the termininal does not report any errors we can take a look at what the gazebo services look like 
+        Remember we used <b> empty.sdf </b> when starting gazebo sim. we should see servives like <b>/world/empty</b> unless we have create our own world  it would have a different name
+        or if we generated our sdf and  call it like <code> <b>gz sim my_simple_robot.sdf</b></code> without adding a world to it we will see <b>/world/defualt</b>
+        <div class="ros-screenshot">
+        <img src="assets/img/Inspection.png"
+             alt="rqt_graph">
+        <div class="ros-caption">Service Inspection  </div>
+     </div>
       </p>
+    </section>
+    <section id="Movements">
+      <h2>6. Robot movements</h2>
+       In this section we will be moving the robot using   set pose that bridges  gazebo services with  ros2 services.  also we will be moving the the head an arms in a sycornised manner. 
+       To get started we need to create a brige between.  set pose exist in gazebo but cannot be bridged to ros2 running the below comand will result in error
+      
+        <pre>ros2 run ros_gz_bridge parameter_bridge  /world/empty/set_pose@ros_gz_interfaces/srv/SetEntityPose@gz.msgs.EntityPose@gz.msgs.Boolean --ros-args -r __node:=set_pose_bridge</pre>
+      <div class="ros-screenshot">
+        <img src="assets/img/FailedEntityPose.png"
+             alt="rqt_graph">
+        <div class="ros-caption">Failed to bride entity </div>
+     </div>
+     <p>The above screenshot says the to create this bridge a  template is needed  however  the documentation state that
+      for set_pose this is not implemented. Therfore we must proceed to create this necessay file we call it.<code> set_pose_bridge.py</code>
+      The code can be found at https://jdasilvathe0ne.github.io/files.html. Since it's a python file  we run it usine <code>python3 set_pose_bidge.py</code>  once this is run we check the is the  topic is linked from 
+      gazebo to ros2 
+<pre>
+gz  service --list | grep set_pose
+#  once that is completed  we run
+ros2  service list | grep pose 
 
-      <ul>
-        <li>Accurate physics simulation</li>
-        <li>Sensor emulation (lidar, camera, IMU)</li>
-        <li>Realistic robot-environment interaction</li>
-      </ul>
+</pre>
+<div class="ros-screenshot">
+        <img src="assets/img/ViewingBridgeServices.png"
+             alt="rqt_graph">
+        <div class="ros-caption">Failed to bride entity </div>
+</div>
+       Thn the video below show set pose being  call multiple times from a bash file  which cause the robot to move in a triangulare motion and returing to the starting
+       postion. setpose.bash and called  via <code> bash pose.bash</code>
+<pre>
+gz service -s /world/empty/set_pose   --reqtype gz.msgs.Pose   --reptype gz>
+gz service -s /world/empty/set_pose   --reqtype gz.msgs.Pose   --reptype gz>
+gz service -s /world/empty/set_pose   --reqtype gz.msgs.Pose   --reptype gz>
+gz service -s /world/empty/set_pose   --reqtype gz.msgs.Pose   --reptype gz>
 
-      <p>
-        Gazebo integrates with ROS 2 through dedicated plugins, allowing simulation
-        data to be published as standard ROS topics.
-      </p>
+</pre>
+       <div class="video-container">
+
+  <video controls>
+      <source src="assets/videos/SetPose.mp4" type="video/mp4">
+
+      <!-- Captions -->
+      <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+  </video>
+  <div class="ros-caption">Collision and interia added</div>
+</div>
+Now it's time to move the Robot. Our robot have  a head and two arms that can move. our goal here is to synchronise movments between the two  to acquire a 
+smooth movmenn between the two  three joints.  Using bash the idea is to  call each instruction and wiit for a bit
+this causes the joints to appear to me synchronosly  as before we'll write the movement instruction to a file. But first we need to tell gazebo  expect movement instruction 
+bycreating the necessay topic for  the joints. Our first instinct is to achieve this by creating a bridge and tell it to expect a double  as input 
+<pre>
+  ros2 run ros_gz_bridge parameter_bridge /model/simple_bot/joint/body_to_head/0/cmd_pos@std_msgs/msg/Float64]gz.msgs.Dou
+ble'      
+
+</pre>
+This instruction prodcuces the bleow error eventhough  when  you run <code> gz topic --list </code> you see <b>/model/simple_bot/joint/body_to_head/0/cmd_pos</b>  being listed
+this appears to be a bug in gz difinition 
+</p>
+<p class="error">
+  [WARN] [1768174863.254939316] [ros_gz_bridge]: Failed to create a bridge for topic [/model/simple_bot/joint/body_to_head/0/cmd_pos] 
+  with ROS2 type [std_msgs/msg/Float64] to topic [/model/simple_bot/joint/body_to_head/0/cmd_pos] with Gazebo Transport type [gz.msgs.Double]:
+  failed to resolve name: topic name token must not start with a number, 
+  at ./src/rcl/expand_topic_name.c:73
+
+     </p> 
+</section>
+<section id="controllers">
+  <h2>7. Adding  controllers</h2>
+    <p> To get pass this we  set the topic directly in the urdf defintion and then  call the  bridge instruction without referencing the service name.  Modify your urdf similar to to code snippet below. for each joint  that you wish to move add  a state publisher ( once) and then add  the controller 
+      and then the  corresponding topic
 
       <pre>
-gazebo
+&lt;gazebo&gt;
+ &lt;plugin filename=&quot;gz-sim-joint-state-publisher-system&quot; name=&quot;gz::sim::systems::JointStatePublisher&quot;&gt;
+  &lt;topic&gt;joint_states&lt;/topic&gt;
+ &lt;/plugin&gt;
+
+ &lt;plugin filename=&quot;gz-sim-joint-position-controller-system&quot; name=&quot;gz::sim::systems::JointPositionController&quot;&gt;
+  &lt;joint_name&gt;body_to_head&lt;/joint_name&gt;
+  &lt;topic&gt;/model/simple_bot/head_angle&lt;/topic&gt;
+  &lt;p_gain&gt;100&lt;/p_gain&gt;
+  &lt;i_gain&gt;0.1&lt;/i_gain&gt;
+  &lt;d_gain&gt;10&lt;/d_gain&gt;
+ &lt;/plugin&gt;
+
+ &lt;plugin filename=&quot;gz-sim-joint-position-controller-system&quot; name=&quot;gz::sim::systems::JointPositionController&quot;&gt;
+  &lt;joint_name&gt;left_arm_joint&lt;/joint_name&gt;
+  &lt;topic&gt;/model/simple_bot/left_arm_angle&lt;/topic&gt;
+  &lt;p_gain&gt;100&lt;/p_gain&gt;
+  &lt;i_gain&gt;0.1&lt;/i_gain&gt;
+  &lt;d_gain&gt;10&lt;/d_gain&gt;
+ &lt;/plugin&gt;
+
+ &lt;plugin filename=&quot;gz-sim-joint-position-controller-system&quot; name=&quot;gz::sim::systems::JointPositionController&quot;&gt;
+  &lt;joint_name&gt;right_arm_joint&lt;/joint_name&gt;
+  &lt;topic&gt;/model/simple_bot/right_arm_angle&lt;/topic&gt;
+  &lt;p_gain&gt;100&lt;/p_gain&gt;
+  &lt;i_gain&gt;0.1&lt;/i_gain&gt;
+  &lt;d_gain&gt;10&lt;/d_gain&gt;
+ &lt;/plugin&gt;
+ &lt;/gazebo&gt;
+
       </pre>
+<p>
+  Once the urdf has been modified  restart the simulation and create the bridges  between ros and gazebo with the below commands. We need to make a call for each topic, this command only call the topic for 
+  the head,  you need to  make  separate call for the left and right hands.
 
-      <div class="placeholder">
-        Screenshot: Robot model spawned in Gazebo
-      </div>
+  <pre>
+ros2 run ros_gz_bridge parameter_bridge /model/simple_bot/<b>head_angle</b>@std_msgs/msg/Float64]gz.msgs.Double 
+
+  </pre>
+
+   <div class="video-container">
+
+  <video controls>
+      <source src="assets/videos/robotMotiongz.mp4" type="video/mp4">
+
+      <!-- Captions -->
+      <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+  </video>
+  <div class="ros-caption">Sychronnised  hand and head movements</div>
+</div>
+</p>
+      
+    
+
     </section>
-
-    <!-- Section 3 -->
-    <section id="controllers">
-      <h2>Robot Controllers</h2>
-
+  <serction id="Understanding">
+    <h2> Understanding  Check</h2>
+    <h4>Gazebo Harmoinc</h4>
       <p>
-        Controllers convert high-level commands into low-level actuator signals.
-        In ROS 2, controllers are typically managed using
-        <strong>ros2_control</strong>.
+       Use to add real world attribute to a smiulation environment such as collsions, physics, gravity, light.   In  a 3d  world
+       it help the simulation to feel realisitic. I is very useful and can be used, to identify   issues that ma occure with the robot once deployed.   it helps you to correct
+       any hardware or sotwaare issue whithout spending a lot of money  borken system as a result of testing in the field 
       </p>
+    <h4>Rviz2</h4>
+    Rvis is used to visualize  robout yuu have described in a urdf file,  it does not include real world attribute. it can be used to virtually view  a robot movements when deployed,  it captures sensor data such as error, navagtion, cordinates  using topics, services and nodes,
+    workking togeting  to  from synchronization.  Data which can be used or degugging.
+    <h4> TF tree</h4>
+    The  TF tree  is used to present  the logical  hierarchical relationship between the diffrent parts of the robot.
+    <h4>robot model(URDF)</h4>
+     An xml defintion of the robot physical structure.   such as joints(thier movements), link dimension. Both Gazebo and rviz utilizes this definition file,  whith gazebo require additional parameters
+     before it can be run( such as , colison, and gravity, friction)
 
-      <p>
-        Common controller types include:
-      </p>
+    <4>ros_gz_bridge interfaces</4>
+      Allow commmunicaion between ros and gazebo, it ranslated messages such as  sensor data and control commands between  ros2 topics  and gazebo 
+      transport Topics, whill  allows  developers to run  real simulation.
+  </serction>
 
-      <ul>
-        <li>Joint position controllers</li>
-        <li>Joint velocity controllers</li>
-        <li>Effort controllers</li>
-      </ul>
-
-      <p>
-        Controllers provide a clean abstraction between software logic and hardware.
-      </p>
-
-      <div class="placeholder">
-        Diagram: Control pipeline from command to actuator
-      </div>
-    </section>
-
-    <!-- Section 4 -->
-    <section id="cmdvel">
-      <h2>Velocity Control Using <code>cmd_vel</code></h2>
-
-      <p>
-        The <code>cmd_vel</code> topic is a standard ROS interface used to control
-        mobile robots using velocity commands.
-      </p>
-
-      <p>
-        These commands specify:
-      </p>
-
-      <ul>
-        <li>Linear velocity (forward/backward)</li>
-        <li>Angular velocity (rotation)</li>
-      </ul>
-
-      <pre>
-ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.5}, angular: {z: 1.0}}"
-      </pre>
-
-      <p>
-        This interface is widely used because it is hardware-agnostic and easy to
-        integrate into higher-level planning systems.
-      </p>
-
-      <div class="placeholder">
-        Screenshot: Robot moving in simulation using cmd_vel
-      </div>
-    </section>
-
-    <!-- Section 5 -->
-    <section id="integration">
-      <h2>System Integration</h2>
-
-      <p>
-        System integration involves combining perception, planning, and control
-        into a single coordinated robotic system.
-      </p>
-
-      <p>
-        In ROS 2, integration is achieved through:
-      </p>
-
-      <ul>
-        <li>Standardized message interfaces</li>
-        <li>Launch files for orchestration</li>
-        <li>Parameter configuration</li>
-      </ul>
-
-      <p>
-        Launch files allow the entire simulation stack to be started with a single
-        command.
-      </p>
-
-      <pre>
-ros2 launch my_robot bringup.launch.py
-      </pre>
-
-      <div class="placeholder">
-        Screenshot: Multiple nodes running via launch file
-      </div>
-    </section>
-
-    <!-- Section 6 -->
-    <section id="testing">
-      <h2>Testing and Validation</h2>
-
-      <p>
-        Testing ensures that robot behavior in simulation matches expected outcomes.
-      </p>
-
-      <p>
-        Common validation steps include:
-      </p>
-
-      <ul>
-        <li>Verifying topic communication</li>
-        <li>Checking TF frame consistency</li>
-        <li>Monitoring controller responses</li>
-      </ul>
-
-      <p>
-        ROS 2 tools such as <code>rqt_graph</code> and <code>ros2 topic echo</code>
-        are essential for debugging.
-      </p>
-
-      <div class="placeholder">
-        Screenshot: rqt_graph showing full system
-      </div>
-    </section>
-
-    <!-- Section 7 -->
-    <section id="reflection">
-      <h2>Reflection</h2>
-
-      <p>
-        This lab demonstrates how simulation bridges the gap between theory and
-        real-world robotic deployment.
-      </p>
-
-      <p>
-        By combining URDF modeling, TF coordination, controller management, and
-        velocity-based control, a complete robotic workflow is achieved.
-      </p>
-
-      <p>
-        Simulation-first development significantly improves reliability and safety
-        when transitioning to physical robots.
-      </p>
+    
+      
     </section>
 
   </main>
