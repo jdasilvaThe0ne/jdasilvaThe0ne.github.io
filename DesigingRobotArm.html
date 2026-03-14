@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Lab 1 – Getting Started with ROS 2</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Profile (Top Left) -->
+  <div class="profile">
+    <img src="assets/img/me.jpeg" alt="Justino DaSilva">
+    <span>Justino DaSilva</span>
+  </div>
+<nav class="sidebar">
+    <h2>Robotics Portfolio</h2>
+    <h3>1. Labs</h3>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lab1.html">Lab 1 – Getting Started</a></li>
+      <li><a href="lab2.html">Lab 2 – Core Concepts</a></li>
+      <li><a href="lab3.html">Lab 3 – URDF & RViz2</a></li>
+      <li><a href="lab4.html">Lab 4 – Simulation & Control</a></li>
+    </ul>
+    <h2>2. Applications</h2>
+     <ul>
+      <li> <a href="DesigingRobotArm.html">Room Control System</a></li>
+      <!--li> <a href="arduino.html"> Programming</a></li>
+      <li> <a href="Rasberrypie.hmml">OtherOptions</a></li-->
+     </ul>
+  </nav>
+<main class="content">
+
+<section id="overview">
+<h2>Room Control Robot Arm</h2>
+
+<p>
+This project demonstrates an automated environmental control system that combines
+sensors and a robotic arm to manage lighting and water supply inside a room.
+The system was designed in Tinkercad and implemented using an Arduino Uno,
+multiple sensors, and 3D printed parts using Bambulab printer with ASA filament .
+</p>
+
+<p>
+The robot arm rotates along the Z-axis approximately 180° in order to flip a
+mechanical switch that activates a water pump. The system also monitors room
+activity using distance and light sensors to automatically control lighting.
+</p>
+
+<div class="ros-screenshot">
+  <img src="assets/img/FinalSetup.jpg"
+         alt="Sample Readings">
+   <div class="ros-caption">
+      Final Product
+    </div>
+</div>
+
+</section>
+
+
+<section id="design">
+<h2>Mechanical Design</h2>
+
+<p>
+The robotic arm was designed in Tinkercad and later 3D printed using a BambuLab
+printer. The arm rotates along the Z-axis using a base servo motor SG90. A second
+servo MG966r controls the arm movement that physically flip a switch that activates the
+water pump: The on positon is aproximately at 60° and the off at 50° relative to the starting postion
+of the base. In both cases the are would need to move 70° downwards to flip on or off the switch
+</p>
+
+
+
+
+      <!--div class="placeholder"-->
+    <div class="ros-screenshot">
+  <img src="assets/img/view1.png"
+         alt="Arm Parts view 1">
+   <div class="ros-caption">
+      Tinkercad objects 
+    </div>
+</div>
+
+      <!--div class="placeholder"-->
+    <div class="ros-screenshot">
+  <img src="assets/img/view2.png"
+         alt="Arm Parts view 2">
+   <div class="ros-caption">
+      Tinkercad objects
+    </div>
+</div>
+
+
+
+      <!--div class="placeholder"-->
+    <div class="ros-screenshot">
+  <img src="assets/img/TinkerArm.png"
+         alt="Asembled Arm">
+   <div class="ros-caption">
+      Assembled arm
+    </div>
+</div>
+<div class="ros-screenshot">
+  <img src="assets/img/ExampleOutput.png"
+         alt="Sample Readings">
+   <div class="ros-caption">
+      Sample Sensor reading
+    </div>
+</div>
+
+</section>
+
+
+<section id="hardware">
+<h2> Hardware Components</h2>
+To replicate this project  you would  the devices listed bleow
+<table border="1">
+  <thead>
+    <tr>
+      <th>Item #</th>
+      <th>Item</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>3D Printer</td>
+      <td>Used to print the components designed for the robotic arm.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Arduino Uno</td>
+      <td>Interfaces with the sensors and actuators used in this project.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Breadboard</td>
+      <td>Allows multiple electronic components to be connected to a single power source without soldering.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>SG90 Servo (Base Rotation)</td>
+      <td>Controls the rotation of the base, allowing the arm to move between the ON and OFF positions of the pump switch.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>MG996R Servo (Arm Movement)</td>
+      <td>Controls the movement of the arm and provides sufficient torque to flip the switch.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>HC-SR04 Ultrasonic Sensor</td>
+      <td>Used to detect the proximity of a person. Although the sensor can measure up to 100 cm, a distance of 50 cm is used in testing to represent proximity.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>A02YYUW Water Level Sensor</td>
+      <td>A waterproof sensor used to determine the water level in the tank, making it suitable for monitoring liquid levels.</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Light Sensor (LDR)</td>
+      <td>Monitors the lighting conditions in the room to determine whether the light should be turned on when someone approaches.</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Red LED Indicator</td>
+      <td>Indicates to the user that the water pump is currently running.</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>5-cell Rechargeable Battery Pack (6V)</td>
+      <td>Provides independent power for the servos, since the power supplied by the Arduino is not sufficient for them to operate optimally.</td>
+    </tr>
+  </tbody>
+</table>
+<!--
+<ol>
+<li>A 3d Printer<</li> To print the items designed for the robot arm
+
+<li>Arduino Uno</li> To  interface with ther sensors and actuators used to build this project
+
+<li>Breadboard</li>  Allow you to connect multiple components to single power source 
+<li>SG90 Servo (Base rotation)</li> Controls the movement of the base into the on and off position of the  pump switch.
+<li>MG996R Servo (Arm movement)</li> Controls the movement of the arm and have sufficient force to flip the switch
+<li>HC-SR04 Ultrasonic Sensor</li> used to detect closness of a human. Since the limit for this sensor is 100cm  in the test case we use  50cm to reresent proximity
+<li>A02YYUW Water Level Sensor</li> A water proof sensor  used to  determine the tank level  since it it water proof it is ideal for this purpose.
+<li>Light Sensor (LDR)</li>  monitors the lighting in the room to determing if the light need to be turned on when someone apoaches 
+<li>Red LED indicator</li> Use to indicate to the user  that he water pump is running 
+<li>5-cell rechargeable battery pack (6V)</li>  The power provided by the  arduino is not sufficient  to powers the  servos  they require ieoendent powere to 
+function optimally.  
+</ol>-->
+
+  <div class="ros-screenshot">
+  <img src="assets/img/HardwareComponnets.png"
+         alt="ROS version">
+   <div class="ros-caption">
+      hardware Components
+    </div>
+</div>
+
+
+</section>
+
+
+<section id="sensors">
+<h2>Sensor System</h2>
+
+<p>
+The system uses three sensors to monitor room conditions and water tank levels.
+</p>
+
+<h3>Light Sensor</h3>
+<p>
+Detects the brightness level in the room. When the room is dark and a person is
+detected nearby, the system automatically turns on the light and turns it off when these conditons are not met.
+</p>
+
+<h3>HC-SR04 Ultrasonic Sensor</h3>
+<p>
+Measures the distance of objects in front of the sensor. It is used to detect
+whether a person has entered the room. The test case distance threshold is
+approximately 100 cm.
+</p>
+
+<h3>A02YYUW Water Level Sensor</h3>
+<p>
+Used to detect the water level inside the tank. If the water level is low,
+the system activates the pump to refill the tank.
+</p>
+
+
+
+<!--div class="placeholder">Sensor setup images</div-->
+
+</section>
+
+
+<section id="logic">
+<h2>System Logic</h2>
+
+<p>
+The control logic is implemented on an Arduino Uno. The system continuously
+monitors room conditions and water tank status. I uses Serial. print to  display a  table format output to print  sensor data  at 10 seconds intevals
+</p>
+
+<h3>Lighting Logic</h3>
+
+<ul>
+<li>If the room is dark</li>
+<li>AND a person approaches within 100cm</li>
+<li>Turn on the light</li>
+<li>When the person leaves the room, turn off the light</li>
+</ul>
+
+<h3>Water Pump Logic</h3>
+
+<ul>
+<li>If tank level is low → activate robot arm</li>
+<li>Robot arm flips switch to start pump</li>
+<li>Pump runs for 1 minute</li>
+<li>If a leak is detected (distance does not increase)</li>
+<li> activate arm to shut off pump</li>
+<li>System waits 2 minutes and retries</li>
+</ul>
+
+<div class="ros-screenshot">
+  <img src="assets/img/ExampleOutput.png"
+         alt="Sample Readings">
+   <div class="ros-caption">
+      Sample Sensor reading
+    </div>
+</div>
+</section>
+
+
+<section id="testing">
+<h2>Test Case</h2>
+
+<p>
+Both distance sensors were tested at a reference distance of 100 cm.
+The system was evaluated for pump activation, leak detection, and retry logic.
+</p>
+
+<ul>
+<li>Pump runtime: 1 minute</li>
+<li>Retry delay: 2 minutes</li>
+<li>Leak detection: no change in measured distance</li>
+<li>Retry counter: records number of failed fill attempts</li>
+</ul>
+
+<div class="ros-screenshot">
+  <img src="assets/img/LeakCyle.png"
+         alt="Multiple runs">
+   <div class="ros-caption">
+      Multiple pump cycle
+    </div>
+</div>
+</section>
+</section>+
+
+<section id="servo">
+<h2>Servo Motor Selection</h2>
+
+<p>
+Initially, two SG90 servo motors were used for the robot arm. However,
+the SG90 motor did not provide sufficient torque to flip the mechanical switch.
+</p>
+
+<p>
+This caused the servo to stall and eventually burn out. To solve this issue,
+the arm servo was upgraded to an MG996R high-torque servo motor.
+</p>
+<div class="video-container">
+        <video controls>
+            <source src="assets/videos/InsufficientPower.mp4" type="video/mp4">
+
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </video>
+        <div class="ros-caption">arm Slipping</div>
+      </div>
+<p>
+The final configuration used:
+</p>
+
+<ul>
+<li>SG90 – Base rotation</li>
+<li>MG996R – Arm actuation</li>
+</ul>
+
+</section>
+
+
+<!--section id="power">
+<h2>Power System</h2>
+
+<p>
+The system is powered by a 5-cell rechargeable battery pack using
+1.2V cells connected in series.
+</p>
+
+<p>
+Total voltage:
+</p>
+
+<pre>
+1.2V × 5 = 6V
+</pre>
+
+<p>
+This voltage is within the safe operating range of both servo motors
+and the Arduino system.
+</p>
+
+<div class="placeholder">Battery pack image</div>
+
+</section-->
+
+
+<section id="status">
+<h2>Status Indicators</h2>
+
+<ul>
+<li>left LED indicates the pump is currently running</li>
+<li>Arduino serial monitor prints the retry counter an al</li>
+<li>System logs number of failed attempts to fill the tank</li>
+</ul>
+
+<!--pre>
+Pump Attempt Count: 1
+Pump Attempt Count: 2
+Pump Attempt Count: 3
+</pre-->
+
+</section>
+
+
+<section id="demo">
+<h2>System Demonstration</h2>
+
+<div class="video-container">
+<video controls>
+<source src="videos/system_demo.mp4" type="video/mp4">
+</video>
+</div>
+
+</section>
+
+
+<!--section id="future">
+<h2>Future Improvements</h2>
+
+<ul>
+<li>Use relay module instead of mechanical switch</li>
+<li>Add WiFi monitoring</li>
+<li>Add LCD display for system status</li>
+<li>Use stronger servo mount for durability</li>
+</ul>
+
+</section-->
+
+</main>
+</body>
+   <!-- Footer -->
+  <footer class="footer">
+    <p>
+      © 2025 Justino DaSilva · Robotics Portfolio
+    </p>
+    <p>
+      Built with ROS 2, HTML5, and CSS · Academic & Professional Use
+    </p>
+  </footer>   
+</html>

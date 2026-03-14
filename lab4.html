@@ -29,11 +29,11 @@
       <li><a href="#simulation">Simulation Overview</a></li>
       <li><a href="#gazebo">Installing Gazebo</a></li>
       <li> <a href="#launching"> Starting Gazebo </a></li>
-      <li><a href="spawning"> Spaning URDF </a></li>
+      <li><a href="#spawning"> Spawning URDF </a></li>
       <li><a href="#inspection">Inspection of gazebo Nodes</a></li>
 
-      <li><a href="Movements">Robot movements</a></li>
-      <li><a href="Contorllers"> Adding Contollers</a></li>
+      <li><a href="#Movements">Robot movements</a></li>
+      <li><a href="#Contorllers"> Adding Contollers</a></li>
       <li><a href="#Understanding">Understanding checks</a></li>
      
     </ul>
@@ -86,7 +86,7 @@ sudo apt install ros-jazzy-ros-gz</pre>
      </p>
      </section>
 
-     <section id="spanning">
+     <section id="spawning">
       <h2>4. Spawning simple_bot</h2>
      <p>
        we can clone(spawn) the robot that we created in the previous lab  and place in in  the empty world.  However some changes needs to be made before we can do this successully. 
@@ -272,7 +272,7 @@ this appears to be a bug in gz difinition
 
      </p> 
 </section>
-<section id="controllers">
+<section id="Controllers">
   <h2>7. Adding  controllers</h2>
     <p> To get pass this we  set the topic directly in the urdf defintion and then  call the  bridge instruction without referencing the service name.  Modify your urdf similar to to code snippet below. for each joint  that you wish to move add  a state publisher ( once) and then add  the controller 
       and then the  corresponding topic
