@@ -147,9 +147,7 @@
         <li><strong>Below 20 cm:</strong> red LED</li>
       </ul>
 
-      <!--div class="placeholder">[Insert system demo video]</div-->
-    </section>
-
+     
     <!-- WIRING -->
     <section>
       <h2>Wiring Configuration & Issues</h2>
@@ -255,6 +253,18 @@ ECHO = 24
 
     <!-- CODE -->
     <section>
+      <h2> Demo video </h2>
+      <div class="video-container">
+        <video controls>
+            <source src="assets/videos/SmallDemo.mp4" type="video/mp4">
+
+            <!-- Captions -->
+            <track src="captions.vtt" kind="subtitles" srclang="en" label="English" default>
+        </video>
+        <div class="ros-caption">Samall demo video</div>
+      </div>
+    </section>
+
       <h2>Python Implementation</h2>
        Below is the code used to for this implementation<br>
 
@@ -293,7 +303,7 @@ def get_distance():
 
     # Send trigger pulse
     GPIO.output(TRIG, True)
-    time.sleep(0.00002)  # 20 microseconds (slightly longer)
+    time.sleep(0.0001)  # 20 microseconds (slightly longer)
     GPIO.output(TRIG, False)
 
     start = time.time()
@@ -363,6 +373,14 @@ except KeyboardInterrupt:
     </section>
 
     <!-- CONCLUSION -->
+     <section>
+      </section>
+      <h1> Observaion</h1>
+       <p>
+        sometimes when the  the pi is powered off and the  monitor is disconnected  and the wires are touched one of the leds would light. i don't have capacitor  on the board and the pi zerodoes not have a 
+        built in battery.  it wierd 
+       </p>
+     </section>
     <section>
       <h2>Conclusion</h2>
 
