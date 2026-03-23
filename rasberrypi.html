@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Raspberry Pi Project – Distance Sensor System</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script> 
+    function toggleCode(button){
+      const wrapper =button.nextElementSibling;
+      wrapper.classList.toggle("expanded");
+        button.textContent=wrapper.classList.contains("expanded")
+        ?"hide_code"
+        :"show_code";
+      
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Profile -->
+  <div class="profile">
+    <img src="assets/img/me.jpeg" alt="Justino DaSilva">
+    <span>Justino DaSilva</span>
+  </div>
+
+  <!-- Sidebar -->
+ <nav class="sidebar">
+    <h2>Robotics Portfolio</h2>
+    <h3>1. Labs</h3>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lab1.html">Lab 1 – Getting Started</a></li>
+      <li><a href="lab2.html">Lab 2 – Core Concepts</a></li>
+      <li><a href="lab3.html">Lab 3 – URDF & RViz2</a></li>
+      <li><a href="lab4.html">Lab 4 – Simulation & Control</a></li>
+    </ul>
+    <h2>2. Applications</h2>
+     <ul>
+      <li> <a href="DesigingRobotArm.html">Room Control system</a></li>
+      <li> <a href="Rasberrypi.html">Using RaspberryPi</a></li>
+      <!--li> <a href="arduino.html"> Programming</a></li>
+      <li> <a href="Rasberrypie.hmml">OtherOptions</a></li-->
+     </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+
+    <!-- TITLE -->
+    <section>
+      <h1>Raspberry Pi Distance Sensor System</h1>
+
+      <p>
+        This task involved configuring and troubleshooting multiple Raspberry Pi devices,
+        followed by the implementation of a distance-based LED indicator system using
+        an ultrasonic sensor (HC-SR04).
+      </p>
+    </section>
+
+    <!-- HARDWARE TROUBLESHOOTING -->
+    <section>
+      <h2>Initial Hardware Challenges</h2>
+
+      <p>
+        The task began with a Raspberry Pi 3, identified by its black USB ports. A 16GB
+        memory card was flashed with the Raspberry Pi operating system and inserted into the pi. However, upon boot,
+        the monitor failed to display output and continuously flashed primary colours.
+      </p>
+
+      <p>
+         After some anslyis it  was supposed that the cause was insufficient power. The  a samsung phone charger used  which provided 2A,
+        whereas the Raspberry Pi 3   requires from 2.5A–3A for stable operation.
+        This likely prevented the system from completing the boot process.
+      </p>
+
+      <div class="ros-screenshot">
+        <img src="assets/img/PrimaryColours.jpg"
+             alt="rqt_graph">
+        <div class="ros-caption">Primary colours at boot </div>
+</div>
+    </section>
+
+    <!-- PI 4 ATTEMPT -->
+    <section>
+      <h2>Raspberry Pi 4 Display Issues</h2>
+
+      <p>
+        A Raspberry Pi 4 was then used utilized to attempt the complete the project.  Hoever in this second case a different issue arose the  monitor available for use monitor was only equiped with USB-C display input,
+       port,  while the Pi 4 outputs video via micro-HDMI.  Finding a cable  to connect these two system was unsuccessful Due to the lack of a direct cable. As such 
+        multiple adapters were tested, a port hub  was even connected in the reverse order(primary port to monitor and secondary port to pi) to attempt to  connect the  the monitor to the pi.
+      </p>
+
+      <p>
+        Attempts included:
+      </p>
+
+      <ul>
+        <li>Micro-HDMI to HDMI adapter</li>
+        <li>USB-C hub with HDMI output</li>
+        <li>External power supply for the monitor</li>
+      </ul>
+
+      <p>
+        Despite these configurations, no display output was achieved. After testing
+        multiple connection orders and power configurations, it was concluded that the
+        adapter being used was faulty.
+      </p>
+
+      <!--div class="placeholder">[Insert diagram of attempted connections]</div-->
+    </section>
+
+    <!-- PI ZERO -->
+    <section>
+      <h2>Successful Setup: Raspberry Pi Zero W</h2>
+
+      <p>
+        The final solution involved using a Raspberry Pi Zero W, which required a
+        mini-HDMI connection. After locating the correct adapter, the system successfully booted.
+      </p>
+
+      <p>
+         The lecture suggested that the pi zero had limitted display capabilites  and as such an  SSH was used instead of direct display output.
+        The pi zero  took approximately 4–5 minutes  to complete its boot sequence.
+      </p>
+
+      <div class="ros-screenshot">
+        <img src="assets/img/ssh_connect.png"
+             alt="rqt_graph">
+        <div class="ros-caption">SSH connection to pie zero </div>
+</div>
+    </section>
+
+    <!-- PROJECT DESCRIPTION -->
+    <section>
+      <h2>System Design: Distance-Based LED Indicator</h2>
+
+      <p>
+        The project  uses an HC-SR04 ultrasonic sensor to measure distance
+        and control four LEDs to indicate proximity levels.
+      </p>
+
+      <h3>Distance Logic</h3>
+      <ul>
+        <li><strong>60–80 cm:</strong> 4 LEDs ON (2 green, 2 red)</li>
+        <li><strong>40–59 cm:</strong> 3 LEDs ON ( 1 green 2 red)</li>
+        <li><strong>20–39 cm:</strong> 2 LEDs ON ( both red)</li>
+        <li><strong>Below 20 cm:</strong> red LED</li>
+      </ul>
+
+      <!--div class="placeholder">[Insert system demo video]</div-->
+    </section>
+
+    <!-- WIRING -->
+    <section>
+      <h2>Wiring Configuration & Issues</h2>
+
+      <p>
+        During testing, the ultrasonic sensor consistently returned a distance of 0 cm.
+        This indicated either incorrect wiring or improper voltage handling.
+      </p>
+
+      <p>
+        The HC-SR04 sensor operates at 5V, while the Raspberry Pi GPIO operates at 3.3V.
+         therfore A voltage divider  was  required on the ECHO pin.  to achieve this  a 220Ω and 10kΩ resitors were used as they were the only ones available at the time. 
+      </p>
+
+      <h3>Issue Identified</h3>
+      <p class="error">
+        The resistor combination used  to correct the voltage were may have resulted incorrect voltage scaling,
+        preventing proper signal detection.
+      </p>
+
+      <h3>Attempted Fix</h3>
+      <div class="resolved">
+         The two  new resistors that were used were:
+        <ul>
+        
+        <li>220kΩ  (top resistor)</li>
+        <li>2kΩ (bottom resistor) </li>
+        <li> connected in the following order </li>
+        </ul>
+        <ol>
+        <li>From  echo pin ECHO pin → one end of 2kΩ resistor</li>
+        <li> Other end of 2kΩ → GPIO24
+         at the Same point →  connect one end of 220Ω</li>
+        <li>  Connect other end of 220Ω → GND </li>
+        </ol>
+    <div class="ros-screenshot">
+        <img src="assets/img/Wiring2.png"
+             alt="rqt_graph">
+        <div class="ros-caption">Wiring Diagram </div>
+</div>
+ <h3>Working Fix</h3>
+      <div class="resolved">
+        Note:  while the obove  diagram did not produce positive output I still blieve it might have worked  read below for deatails
+         <br> I decided tor try one last try one last thing  which worked, however i only have partial evidence of this.  below is the
+         new config used. 
+        <ul>
+        
+        <li> 1x1kΩ (top resistor)</li>
+        <li>2x2kΩ (botom resistors) </li>
+        <li> connected in the following order </li>
+        </ul>
+        <ol>
+        <li>From  echo pin ECHO pin → one end of 2kΩ resistor</li>
+        <li> Other end of 2kΩ → GPIO24
+         at the Same point →  connect one end of 10KΩ twisted together( paralled)</li>
+        <li>  Connect other end of the twisted pair 2 10KΩ  to → GND </li>
+        </ol>
+    <div class="ros-screenshot">
+        <img src="assets/img/WorkingWiring.png"
+             alt="rqt_graph">
+        <div class="ros-caption">Wiring Diagram </div>
+    </div>
+     The ouput tht was being produces  was getting "no signal" but then 
+     I realised  that bread boards give a lot of problems when the wires are slack. Given that many of  the wires used  was joined,
+    I started touching the cabling randomly. for an instance the leds lit. just for a split second.    Unfurtunately that all got as ut relates to a successfult project. Below is a screenshot shot of the ouput that was given when the leds lit. 
+    <div class="ros-screenshot">
+        <img src="assets/img/singelChance.png"
+             alt="rqt_graph">
+        <div class="ros-caption">only workingSample </div>
+    </div>
+    </section>
+
+
+    <!-- PIN CONFUSION -->
+    <!--section>
+      <h2>GPIO Pin Clarification</h2>
+
+      <p>
+        The code uses BCM pin numbering:
+      </p>
+
+      <pre>
+TRIG = 18
+ECHO = 24
+      </pre>
+
+      <p>
+        Ensure that the wiring follows BCM numbering, not physical pin order.
+        GPIO18 is correct for TRIG. However, double-check that:
+      </p>
+
+      <ul>
+        <li>GPIO18 → TRIG</li>
+        <li>GPIO24 → ECHO (through voltage divider)</li>
+        <li>GND is correctly connected</li>
+      </ul>
+
+      <p class="error">
+        Connecting to the wrong physical pin (e.g., pin 9 instead of GPIO24)
+        will result in constant zero readings.
+      </p>
+    </section0-->
+
+    <!-- CODE -->
+    <section>
+      <h2>Python Implementation</h2>
+       Below is the code used to for this implementation<br>
+
+       <button onclick="toggleCode(this)">show_code</button>
+
+      <pre class="large_code">
+import RPi.GPIO as GPIO
+import time
+
+TRIG = 18
+ECHO = 24
+
+led_green = 17
+led_blue1 = 27
+led_blue2 = 22
+led_red = 23
+
+leds = [led_green, led_blue1, led_blue2, led_red]
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(TRIG, GPIO.OUT)
+GPIO.setup(ECHO, GPIO.IN)
+
+GPIO.output(TRIG, False)
+
+for led in leds:
+    GPIO.setup(led, GPIO.OUT)
+    GPIO.output(led, False)
+
+def get_distance():
+
+    # Ensure clean LOW signal
+    GPIO.output(TRIG, False)
+    time.sleep(0.05)
+
+    # Send trigger pulse
+    GPIO.output(TRIG, True)
+    time.sleep(0.00002)  # 20 microseconds (slightly longer)
+    GPIO.output(TRIG, False)
+
+    start = time.time()
+    timeout = start + 0.05
+
+    # Wait for echo HIGH
+    while GPIO.input(ECHO) == 0:
+        start = time.time()
+        if start > timeout:
+            return None
+
+    stop = time.time()
+    timeout = stop + 0.05
+
+    # Wait for echo LOW
+    while GPIO.input(ECHO) == 1:
+        stop = time.time()
+        if stop > timeout:
+            return None
+
+    elapsed = stop - start
+    distance = (elapsed * 34300) / 2
+
+    return distance
+
+
+def update_leds(distance):
+
+    for led in leds:
+        GPIO.output(led, False)
+
+    if distance >= 60 and distance <= 80:
+        for led in leds:
+            GPIO.output(led, True)
+
+    elif distance >= 40:
+        GPIO.output(led_blue1, True)
+        GPIO.output(led_blue2, True)
+        GPIO.output(led_red, True)
+
+    elif distance >= 20:
+        GPIO.output(led_blue2, True)
+        GPIO.output(led_red, True)
+
+    else:
+        GPIO.output(led_red, True)
+        time.sleep(0.1)
+        GPIO.output(led_red, False)
+
+
+try:
+    while True:
+
+        d = get_distance()
+
+        if d is not None:
+            print("Distance:", round(d, 1), "cm")
+            update_leds(d)
+        else:
+            print("No signal")
+
+        time.sleep(0.2)
+
+except KeyboardInterrupt:
+    GPIO.cleanup()
+      </pre>
+    </section>
+
+    <!-- CONCLUSION -->
+    <section>
+      <h2>Conclusion</h2>
+
+      <p>
+        This task highlighted the importance of hardware compatibility, correct power
+        requirements, and proper signal conditioning when working with embedded systems.
+      </p>
+
+      <p>
+        The transition from Raspberry Pi 3 to Pi 4 and finally to Pi Zero demonstrated
+        the need for adaptability in engineering workflows. Additionally, debugging
+        sensor readings reinforced the importance of correct GPIO mapping and voltage control.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+   <footer class="footer">
+    <p>
+      © 2025 Justino DaSilva · Robotics Portfolio
+    </p>
+    <p>
+      Built with ROS 2, HTML5, and CSS · Academic & Professional Use
+    </p>
+  </footer>
+
+</body>
+</html>
